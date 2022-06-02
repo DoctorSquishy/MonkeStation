@@ -25,7 +25,7 @@
 	var/placetiles = FALSE
 	var/specialtiles = 0
 	var/maxtiles = 100
-	var/obj/item/stack/tile/tiletype
+	var/obj/item/stack/tile/tilestack
 	var/fixfloors = TRUE
 	var/autotile = FALSE
 	var/max_targets = 50
@@ -74,50 +74,20 @@
 	text_dehack = "You detect errors in [name] and reset his programming."
 	text_dehack_fail = "[name] is not responding to reset commands!"
 
-/mob/living/simple_animal/bot/floorbot/get_controls(mob/user)
-	var/dat
-	dat += hack(user)
-	dat += showpai(user)
-	dat += "<TT><B>Floor Repairer Controls v1.1</B></TT><BR><BR>"
-	dat += "Status: <A href='?src=[REF(src)];power=1'>[on ? "On" : "Off"]</A><BR>"
-	dat += "Maintenance panel panel is [open ? "opened" : "closed"]<BR>"
-	dat += "Special tiles: "
-	if(specialtiles)
-		dat += "<A href='?src=[REF(src)];operation=eject'>Loaded \[[specialtiles]/[maxtiles]\]</a><BR>"
-	else
-		dat += "None Loaded<BR>"
-
-	dat += "Behaviour controls are [locked ? "locked" : "unlocked"]<BR>"
-	if(!locked || issilicon(user) || IsAdminGhost(user))
-		dat += "Add tiles to new hull plating: <A href='?src=[REF(src)];operation=autotile'>[autotile ? "Yes" : "No"]</A><BR>"
-		dat += "Place floor tiles: <A href='?src=[REF(src)];operation=place'>[placetiles ? "Yes" : "No"]</A><BR>"
-		dat += "Replace existing floor tiles with custom tiles: <A href='?src=[REF(src)];operation=replace'>[replacetiles ? "Yes" : "No"]</A><BR>"
-		dat += "Repair damaged tiles and platings: <A href='?src=[REF(src)];operation=fix'>[fixfloors ? "Yes" : "No"]</A><BR>"
-		dat += "Traction Magnets: <A href='?src=[REF(src)];operation=anchor'>[anchored ? "Engaged" : "Disengaged"]</A><BR>"
-		dat += "Patrol Station: <A href='?src=[REF(src)];operation=patrol'>[auto_patrol ? "Yes" : "No"]</A><BR>"
-		var/bmode
-		if(targetdirection)
-			bmode = dir2text(targetdirection)
-		else
-			bmode = "disabled"
-		dat += "Line Mode : <A href='?src=[REF(src)];operation=linemode'>[bmode]</A><BR>"
-
-	return dat
-
 /mob/living/simple_animal/bot/floorbot/attackby(obj/item/W , mob/user, params)
 	if(istype(W, /obj/item/stack/tile/plasteel))
 		to_chat(user, "<span class='notice'>The floorbot can produce normal tiles itself.</span>")
 		return
 	if(specialtiles && istype(W, /obj/item/stack/tile))
 		var/obj/item/stack/tile/usedtile = W
-		if(usedtile.type != tiletype)
+		if(usedtile.type != tilestack)
 			to_chat(user, "<span class='warning'>Different custom tiles are already inside the floorbot.</span>")
 			return
 	if(istype(W, /obj/item/stack/tile))
 		if(specialtiles >= maxtiles)
 			return
 		var/obj/item/stack/tile/tiles = W //used only to get the amount
-		tiletype = W.type
+		tilestack = W.type
 		var/loaded = min(maxtiles-specialtiles, tiles.amount)
 		tiles.use(loaded)
 		specialtiles += loaded
@@ -134,27 +104,60 @@
 		if(user)
 			to_chat(user, "<span class='danger'>[src] buzzes and beeps.</span>")
 
-/mob/living/simple_animal/bot/floorbot/Topic(href, href_list)
-	if(..())
-		return TRUE
+///mobs should use move_resist instead of anchored.
+/mob/living/simple_animal/bot/floorbot/proc/toggle_magnet(engage = TRUE, change_icon = TRUE)
+	if(engage)
+		ADD_TRAIT(src, TRAIT_IMMOBILIZED, BUSY_FLOORBOT_TRAIT)
+		move_resist = INFINITY
+		if(change_icon)
+			icon_state = "[toolbox_color]floorbot-c"
+	else
+		REMOVE_TRAIT(src, TRAIT_IMMOBILIZED, BUSY_FLOORBOT_TRAIT)
+		move_resist = initial(move_resist)
+		if(change_icon)
+			update_icon()
 
-	switch(href_list["operation"])
-		if("replace")
+// Variables sent to TGUI
+/mob/living/simple_animal/bot/floorbot/ui_data(mob/user)
+	var/list/data = ..()
+	if(!(bot_cover_flags & BOT_COVER_LOCKED) || issilicon(user) || IsAdminGhost(user))
+		data["custom_controls"]["tile_hull"] = autotile
+		data["custom_controls"]["place_tiles"] =  placetiles
+		data["custom_controls"]["place_custom"] = replacetiles
+		data["custom_controls"]["repair_damage"] = fixfloors
+		data["custom_controls"]["traction_magnets"] = !!HAS_TRAIT_FROM(src, TRAIT_IMMOBILIZED, BUSY_FLOORBOT_TRAIT)
+		data["custom_controls"]["tile_stack"] = 0
+		data["custom_controls"]["line_mode"] = FALSE
+		if(tilestack)
+			data["custom_controls"]["tile_stack"] = tilestack.amount
+		if(targetdirection)
+			data["custom_controls"]["line_mode"] = dir2text(targetdirection)
+	return data
+
+// Actions received from TGUI
+/mob/living/simple_animal/bot/floorbot/ui_act(action, params)
+	. = ..()
+	if(. || (bot_cover_flags & BOT_COVER_LOCKED && !usr.has_unlimited_silicon_privilege))
+		return
+
+	switch(action)
+		if("place_custom")
 			replacetiles = !replacetiles
-		if("place")
+		if("place_tiles")
 			placetiles = !placetiles
-		if("fix")
+		if("repair_damage")
 			fixfloors = !fixfloors
-		if("autotile")
+		if("tile_hull")
 			autotile = !autotile
-		if("anchor")
-			anchored = !anchored
-		if("eject")
-			if(specialtiles && tiletype != null)
-				empty_tiles()
-
-		if("linemode")
-			var/setdir = input("Select construction direction:") as null|anything in list("north","east","south","west","disable")
+		if("traction_magnets")
+			toggle_magnet(!HAS_TRAIT_FROM(src, TRAIT_IMMOBILIZED, BUSY_FLOORBOT_TRAIT), FALSE)
+		if("eject_tiles")
+			if(tilestack)
+				tilestack.forceMove(drop_location())
+		if("line_mode")
+			var/setdir = input(usr, "Select construction direction", "Direction", list("north", "east", "south", "west", "disable"))
+			if(isnull(setdir))
+				return
 			switch(setdir)
 				if("north")
 					targetdirection = 1
@@ -166,12 +169,11 @@
 					targetdirection = 8
 				if("disable")
 					targetdirection = null
-	update_controls()
 
 /mob/living/simple_animal/bot/floorbot/proc/empty_tiles()
-	new tiletype(drop_location(), specialtiles)
+	new tilestack(drop_location(), specialtiles)
 	specialtiles = 0
-	tiletype = null
+	tilestack = null
 
 /mob/living/simple_animal/bot/floorbot/handle_automated_action()
 	if(!..())
@@ -292,7 +294,7 @@
 				result = F
 		if(REPLACE_TILE)
 			F = scan_target
-			if(isfloorturf(F) && !isplatingturf(F) && F.type != initial(tiletype.turf_type)) //The floor must already have a tile.
+			if(isfloorturf(F) && !isplatingturf(F) && F.type != initial(tilestack.turf_type)) //The floor must already have a tile.
 				result = F
 		if(FIX_TILE)	//Selects only damaged floors.
 			F = scan_target
@@ -332,7 +334,7 @@
 
 		switch(process_type) // Other process types have no business here
 			if(REPLACE_TILE)
-				if(!isplatingturf(F) && F.type != initial(tiletype.turf_type))
+				if(!isplatingturf(F) && F.type != initial(tilestack.turf_type))
 					anchored = TRUE
 					icon_state = "[toolbox_color]floorbot-c"
 					mode = BOT_REPAIRING
@@ -342,7 +344,7 @@
 					if(mode == BOT_REPAIRING && F && src.loc == F && isplatingturf(F))
 						F.broken = FALSE
 						F.burnt = FALSE
-						F.PlaceOnTop(initial(tiletype.turf_type), flags = CHANGETURF_INHERIT_AIR)
+						F.PlaceOnTop(initial(tilestack.turf_type), flags = CHANGETURF_INHERIT_AIR)
 						specialtiles -= 1
 						if(specialtiles == 0)
 							speak("Requesting refill of custom floor tiles to continue replacing.")
@@ -377,7 +379,7 @@
 
 	new /obj/item/assembly/prox_sensor(Tsec)
 
-	if(specialtiles && tiletype != null)
+	if(specialtiles && tilestack != null)
 		empty_tiles()
 
 	if(prob(50))

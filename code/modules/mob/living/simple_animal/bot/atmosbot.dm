@@ -68,6 +68,10 @@
 	//Tank type
 	var/tank_type = /obj/item/tank/internals/oxygen/empty
 
+	///Flags Atmosbots use to decide how they should be acting.
+	var/atmos_mode_flags = ATMOSBOT_STATIONARY_MODE
+	//Selections: ATMOS_STATIONARY_MODE
+
 /mob/living/simple_animal/bot/atmosbot/Initialize(mapload, new_toolbox_color)
 	. = ..()
 	var/datum/job/engineer/J = new/datum/job/engineer
@@ -281,48 +285,45 @@
 				return checking_turf
 			to_check_turfs |= adjacent_turf
 	return null
+// Variables sent to TGUI
+/mob/living/simple_animal/bot/atmosbot/ui_data(mob/user)
+	var/list/data = ..()
+	if(!(bot_cover_flags & BOT_COVER_LOCKED) || issilicon(user) || IsAdminGhost(user))
+		data["custom_controls"]["set_breach_pressure"] = breached_pressure
+		data["custom_controls"]["toggle_temp_control"] = temperature_control
+		data["custom_controls"]["set_ideal_temperature"] = ideal_temperature
+		data["custom_controls"]["Gas Scrubbing Controls"] = list(gasses)
+		data["custom_controls"]["stationary_mode"] = atmos_mode_flags & ATMOSBOT_STATIONARY_MODE
+	return data
 
-/mob/living/simple_animal/bot/atmosbot/get_controls(mob/user)
-	var/dat
-	dat += hack(user)
-	dat += showpai(user)
-	dat += "<tt><b>Atmospheric Stabilizer Controls v1.1</b></tt><br><br>"
-	dat += "Status: <a href='?src=[REF(src)];power=1'>[on ? "On" : "Off"]</a><br>"
-	dat += "Maintenance panel panel is [open ? "opened" : "closed"]<br>"
-	if(!locked || issilicon(user) || IsAdminGhost(user))
-		dat += "Breach Pressure: <a href='?src=[REF(src)];set_breach_pressure=1'>[breached_pressure]</a><br>"
-		dat += "Temperature Control: <a href='?src=[REF(src)];toggle_temp_control=1'>[temperature_control?"Enabled":"Disabled"]</a><br>"
-		dat += "Temperature Target: <a href='?src=[REF(src)];set_ideal_temperature=[ideal_temperature]'>[ideal_temperature]C</a><br>"
-		dat += "Gas Scrubbing Controls<br>"
-		for(var/gas_id in gasses)
-			var/gas_enabled = gasses[gas_id]
-			dat += "[GLOB.gas_data.names[gas_id]]: <a href='?src=[REF(src)];toggle_gas=[gas_id]'>[gas_enabled?"Scrubbing":"Not Scrubbing"]</a><br>"
-		dat += "Patrol Station: <A href='?src=[REF(src)];operation=patrol'>[auto_patrol ? "Yes" : "No"]</A><BR>"
-	return dat
+// Actions received from TGUI
+/mob/living/simple_animal/bot/atmosbot/ui_act(action, params)
+	. = ..()
+	if(. || (bot_cover_flags & BOT_COVER_LOCKED && !usr.has_unlimited_silicon_privilege))
+		return
 
-/mob/living/simple_animal/bot/atmosbot/Topic(href, href_list)
-	if(..())
-		return TRUE
+	switch(action)
+		if("set_breach_pressure")
+			var/new_breach_pressure = input(usr, "Pressure to scan for breaches at? (0 to 100)", "Breach Pressure") as num
+			if(!isnum(new_breach_pressure) || new_breach_pressure < 0 || new_breach_pressure > 100)
+				return
+			breached_pressure = new_breach_pressure
+		if("toggle_temp_control")
+			temperature_control = temperature_control ? FALSE : TRUE
+		if("toggle_gas")
+			var/gas_id = list("toggle_gas")
+			for(var/G in gasses)
+				if("[G]" == gas_id)
+					gasses[G] = gasses[G] ? FALSE : TRUE
+		if("set_ideal_temperature")
+			var/new_temp = input(usr, "Set Target Temperature ([T0C] to [T20C + 20])", "Target Temperature") as num
+			if(!isnum(new_temp) || new_temp < T0C || new_temp > T20C + 20)
+				return
+			ideal_temperature = new_temp
+		if("stationary_mode")
+			atmos_mode_flags ^= ATMOSBOT_STATIONARY_MODE
+			path = list()
 
-	if(href_list["set_breach_pressure"])
-		var/new_breach_pressure = input(usr, "Pressure to scan for breaches at? (0 to 100)", "Breach Pressure") as num
-		if(!isnum(new_breach_pressure) || new_breach_pressure < 0 || new_breach_pressure > 100)
-			return
-		breached_pressure = new_breach_pressure
-	else if(href_list["toggle_temp_control"])
-		temperature_control = temperature_control ? FALSE : TRUE
-	else if(href_list["toggle_gas"])
-		var/gas_id = href_list["toggle_gas"]
-		for(var/G in gasses)
-			if("[G]" == gas_id)
-				gasses[G] = gasses[G] ? FALSE : TRUE
-	else if(href_list["set_ideal_temperature"])
-		var/new_temp = input(usr, "Set Target Temperature ([T0C] to [T20C + 20])", "Target Temperature") as num
-		if(!isnum(new_temp) || new_temp < T0C || new_temp > T20C + 20)
-			return
-		ideal_temperature = new_temp
-
-	update_controls()
 	update_icon()
 
 /mob/living/simple_animal/bot/atmosbot/update_icon()

@@ -206,7 +206,7 @@
 			if(istype(W, /obj/item/stock_parts/cell))
 				if(!can_finish_build(W, user))
 					return
-				var/mob/living/simple_animal/bot/ed209/B = new(drop_location(),created_name,lasercolor)
+				var/mob/living/simple_animal/bot/secbot/ed209/B = new(drop_location(),created_name,lasercolor)
 				to_chat(user, "<span class='notice'>You complete the ED-209.</span>")
 				B.cell_type = W.type
 				qdel(W)

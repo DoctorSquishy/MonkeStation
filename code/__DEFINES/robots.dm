@@ -122,6 +122,8 @@
 
 ///Monkestation Edit
 
+/// Vibe bots
+#define VIBE_BOT "Vibebot"
 /// ButtsBot
 #define BUTTS_BOT "Buttsbot"
 /// Atmosbots
@@ -193,3 +195,7 @@
 #define MEDBOT_STATIONARY_MODE (1<<1)
 ///Whether the bot will randomly speak from time to time. This will not actually prevent all speech.
 #define MEDBOT_SPEAK_MODE (1<<2)
+
+//AtmosBOT defines
+///If the bot will stand still, only healing those next to it.
+#define ATMOSBOT_STATIONARY_MODE (1<<0)
