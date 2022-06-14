@@ -115,6 +115,11 @@
 	///What directions this is currently smoothing with. IMPORTANT: This uses the smoothing direction flags as defined in icon_smoothing.dm, instead of the BYOND flags.
 	var/smoothing_junction = null //This starts as null for us to know when it's first set, but after that it will hold a 8-bit mask ranging from 0 to 255.
 	//MONKESTATION ADDITION END
+
+	///Default pixel x shifting for the atom's icon.
+	var/base_pixel_x = 0
+	///Default pixel y shifting for the atom's icon.
+	var/base_pixel_y = 0
 	///Used for changing icon states for different base sprites.
 	var/base_icon_state
 
@@ -812,6 +817,8 @@
   * Default behaviour is to send COMSIG_ATOM_RAD_ACT and return
   */
 /atom/proc/rad_act(strength)
+	if(istype(get_turf(src), /turf/open/indestructible/sound/pool)) ///Monkestation Edit - Pools protect you from rads.
+		strength *= 0.25
 	SEND_SIGNAL(src, COMSIG_ATOM_RAD_ACT, strength)
 
 /**
@@ -834,7 +841,11 @@
   * Called when lighteater is called on this.
   */
 /atom/proc/lighteater_act(obj/item/light_eater/light_eater)
-	return
+	SHOULD_CALL_PARENT(TRUE)
+	SEND_SIGNAL(src,COMSIG_ATOM_LIGHTEATER_ACT)
+	for(var/datum/light_source/light_source in light_sources)
+		if(light_source.source_atom != src)
+			light_source.source_atom.lighteater_act(light_eater)
 
 /**
   * Respond to the eminence clicking on our atom
