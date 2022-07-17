@@ -33,7 +33,33 @@ If d1 = 0 and d2 = dir, it's a O-X cable, getting from the center of the tile to
 If d1 = dir1 and d2 = dir2, it's a full X-X cable, getting from dir1 to dir2
 By design, d1 is the smallest direction and d2 is the highest
 */
+/*
+CODE SCRAP
 
+/turf/open/floor/proc/cable_coil_act(obj/item/I, mob/user, params)
+	if(user.transferItemToLoc(I, drop_location(), silent = FALSE))
+		var/atom/Location = loc
+		var/list/click_params = params2list(params)
+		//Center the icon where the user clicked.
+		if(!click_params || !click_params["icon-x"] || !click_params["icon-y"])
+			return
+		//Clamp it so that the icon never moves more than 16 pixels in either direction (thus leaving the table turf)
+		I.pixel_x = clamp(text2num(click_params["icon-x"]), -(world.icon_size/2), world.icon_size/2)
+		I.pixel_y = clamp(text2num(click_params["icon-y"]), -(world.icon_size/2), world.icon_size/2)
+		return TRUE
+	else
+		return FALSE
+
+
+///Where atoms should drop if taken from this atom
+/atom/proc/drop_location()
+	var/atom/L = loc
+	if(!L)
+		return null
+	return L.AllowDrop() ? L : L.drop_location()
+
+
+*/
 /obj/structure/cable
 	name = "power cable"
 	desc = "A flexible, superconducting insulated cable for heavy-duty power transfer."
