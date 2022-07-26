@@ -4,18 +4,31 @@
 	bodyflag = FLAG_IPC
 	say_mod = "states"
 	sexes = FALSE
-	species_traits = list(NOTRANSSTING,NOEYESPRITES,NO_DNA_COPY,NOZOMBIE,MUTCOLORS,REVIVESBYHEALING,NOHUSK,NOMOUTH, MUTCOLORS, NO_UNDERWEAR)
-	inherent_traits = list(TRAIT_RESISTCOLD,TRAIT_NOBREATH,TRAIT_RADIMMUNE,TRAIT_LIMBATTACHMENT,TRAIT_EASYDISMEMBER,TRAIT_POWERHUNGRY,TRAIT_XENO_IMMUNE, TRAIT_TOXIMMUNE)
-	inherent_biotypes = list(MOB_ROBOTIC, MOB_HUMANOID)
-	mutant_brain = /obj/item/organ/brain/positron
-	mutanteyes = /obj/item/organ/eyes/robotic
-	mutanttongue = /obj/item/organ/tongue/robot
-	mutantliver = /obj/item/organ/liver/cybernetic/upgraded/ipc
-	mutant_butt = /obj/item/organ/butt/cyber //MonkeStation Edit
-	mutantstomach = /obj/item/organ/stomach/battery/ipc
-	mutantears = /obj/item/organ/ears/robot
-	mutant_heart = /obj/item/organ/heart/cybernetic/ipc
-	mutant_organs = list(/obj/item/organ/cyberimp/arm/power_cord)
+	species_traits = list(
+		NOTRANSSTING,
+		NOEYESPRITES,
+		NO_DNA_COPY,
+		NOZOMBIE,
+		MUTCOLORS,
+		REVIVESBYHEALING,
+		NOHUSK,
+		NOMOUTH,
+		MUTCOLORS,
+		NO_UNDERWEAR,
+		)
+	inherent_traits = list(
+		TRAIT_ADVANCEDTOOLUSER,
+		TRAIT_RESISTCOLD,
+		TRAIT_NOBREATH,
+		TRAIT_RADIMMUNE,
+		TRAIT_LIMBATTACHMENT,
+		TRAIT_EASYDISMEMBER,
+		TRAIT_POWERHUNGRY,
+		TRAIT_XENO_IMMUNE,
+		TRAIT_TOXIMMUNE
+		)
+	inherent_biotypes = list(MOB_ROBOTIC,MOB_HUMANOID)
+
 	mutant_bodyparts = list("ipc_screen", "ipc_antenna", "ipc_chassis")
 	default_features = list("mcolor" = "#7D7D7D", "ipc_screen" = "Static", "ipc_antenna" = "None", "ipc_chassis" = "Morpheus Cyberkinetics(Greyscale)")
 	meat = /obj/item/stack/sheet/plasteel{amount = 5}
@@ -32,21 +45,40 @@
 	siemens_coeff = 1.5
 	blood_color = "#000000"
 	reagent_tag = PROCESS_SYNTHETIC
-	species_gibs = GIB_TYPE_ROBOTIC
 	attack_sound = 'sound/items/trayhit1.ogg'
 	allow_numbers_in_name = TRUE
+
 	deathsound = "sound/voice/borg_deathsound.ogg"
+	species_gibs = GIB_TYPE_ROBOTIC
+	dust_anim = "dust-r"
+	gib_anim = "gibbed-r"
+
 	changesource_flags = MIRROR_BADMIN | WABBAJACK
 	species_language_holder = /datum/language_holder/synthetic
 	special_step_sounds = list('sound/effects/servostep.ogg')
 
-	species_chest = /obj/item/bodypart/chest/ipc
-	species_head = /obj/item/bodypart/head/ipc
-	species_l_arm = /obj/item/bodypart/l_arm/ipc
-	species_r_arm = /obj/item/bodypart/r_arm/ipc
-	species_l_leg = /obj/item/bodypart/l_leg/ipc
-	species_r_leg = /obj/item/bodypart/r_leg/ipc
+	// Internal Organs
+	mutant_brain = /obj/item/organ/brain/positron
+	mutanteyes = /obj/item/organ/eyes/robotic
+	mutantears = /obj/item/organ/ears/robot
+	mutanttongue = /obj/item/organ/tongue/robot
+	mutantliver = /obj/item/organ/liver/cybernetic/upgraded/ipc
+	mutantstomach = /obj/item/organ/stomach/battery/ipc
+	mutant_heart = /obj/item/organ/heart/cybernetic/ipc
+	mutant_butt = /obj/item/organ/butt/cyber //MonkeStation Edit
+	mutant_organs = list(/obj/item/organ/cyberimp/arm/power_cord)
 
+	// Bodyparts
+	bodypart_overrides = list(
+		BODY_ZONE_HEAD = /obj/item/bodypart/head/ipc,
+		BODY_ZONE_CHEST = /obj/item/bodypart/chest/ipc,
+		BODY_ZONE_L_ARM = /obj/item/bodypart/l_arm/ipc,
+		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm/ipc,
+		BODY_ZONE_L_LEG = /obj/item/bodypart/l_leg/ipc,
+		BODY_ZONE_R_LEG = /obj/item/bodypart/r_leg/ipc,
+		)
+
+	// Variables Unique to the Species
 	var/saved_screen //for saving the screen when they die
 	var/datum/action/innate/change_screen/change_screen
 

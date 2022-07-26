@@ -27,13 +27,14 @@
 	species_language_holder = /datum/language_holder/lizard
 	digitigrade_customization = DIGITIGRADE_OPTIONAL
 
-	species_chest = /obj/item/bodypart/chest/lizard
-	species_head = /obj/item/bodypart/head/lizard
-	species_l_arm = /obj/item/bodypart/l_arm/lizard
-	species_r_arm = /obj/item/bodypart/r_arm/lizard
-	species_l_leg = /obj/item/bodypart/l_leg/lizard
-	species_r_leg = /obj/item/bodypart/r_leg/lizard
-
+	bodypart_overrides = list(
+		BODY_ZONE_HEAD = /obj/item/bodypart/head/lizard,
+		BODY_ZONE_CHEST = /obj/item/bodypart/chest/lizard,
+		BODY_ZONE_L_ARM = /obj/item/bodypart/l_arm/lizard,
+		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm/lizard,
+		BODY_ZONE_L_LEG = /obj/item/bodypart/l_leg/lizard,
+		BODY_ZONE_R_LEG = /obj/item/bodypart/r_leg/lizard,
+		)
 
 /datum/species/lizard/random_name(gender, unique, lastname, attempts)
 	if(gender == MALE)
@@ -46,13 +47,17 @@
 			. = .(gender, TRUE, null, ++attempts)
 
 /*
- Lizard subspecies: ASHWALKERS
+Lizard subspecies: ASHWALKERS
 */
 /datum/species/lizard/ashwalker
 	name = "Ash Walker"
 	id = "ashlizard"
 	examine_limb_id = SPECIES_LIZARD
-	species_traits = list(MUTCOLORS,EYECOLOR,LIPS, NO_UNDERWEAR)
-	inherent_traits = list(TRAIT_NOGUNS,TRAIT_NOBREATH)
+	species_traits = list(MUTCOLORS,EYECOLOR,LIPS,NO_UNDERWEAR)
+	inherent_traits = list(
+		TRAIT_ADVANCEDTOOLUSER,
+		TRAIT_NOGUNS,
+		TRAIT_NOBREATH,
+		)
 	species_language_holder = /datum/language_holder/lizard/ash
 	digitigrade_customization = DIGITIGRADE_FORCED

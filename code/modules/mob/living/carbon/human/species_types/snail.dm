@@ -1,31 +1,57 @@
 /datum/species/snail
 	name = "\improper Snailperson"
 	id = "snail"
-	offset_features = list(OFFSET_UNIFORM = list(0,0), OFFSET_ID = list(0,0), OFFSET_GLOVES = list(0,0), OFFSET_GLASSES = list(0,4), OFFSET_EARS = list(0,0), OFFSET_SHOES = list(0,0), OFFSET_S_STORE = list(0,0), OFFSET_FACEMASK = list(0,0), OFFSET_HEAD = list(0,0), OFFSET_FACE = list(0,0), OFFSET_BELT = list(0,0), OFFSET_BACK = list(0,0), OFFSET_SUIT = list(0,0), OFFSET_NECK = list(0,0))
+	offset_features = list(
+		OFFSET_UNIFORM = list(0,0),
+		OFFSET_ID = list(0,0),
+		OFFSET_GLOVES = list(0,0),
+		OFFSET_GLASSES = list(0,4),
+		OFFSET_EARS = list(0,0),
+		OFFSET_SHOES = list(0,0),
+		OFFSET_S_STORE = list(0,0),
+		OFFSET_FACEMASK = list(0,0),
+		OFFSET_HEAD = list(0,0),
+		OFFSET_FACE = list(0,0),
+		OFFSET_BELT = list(0,0),
+		OFFSET_BACK = list(0,0),
+		OFFSET_SUIT = list(0,0),
+		OFFSET_NECK = list(0,0),
+		)
 	default_color = "336600" //vomit green
 	species_traits = list(MUTCOLORS, NO_UNDERWEAR)
-	inherent_traits = list(TRAIT_ALWAYS_CLEAN)
+	inherent_traits = list(
+		TRAIT_ADVANCEDTOOLUSER,
+		TRAIT_ALWAYS_CLEAN,
+		)
 	attack_verb = "slap"
 	say_mod = "slurs"
 	coldmod = 0.5 //snails only come out when its cold and wet
 	burnmod = 1.5
 	speedmod = 2
-	punchdamage = 3
+	punchdamagelow = 1
+	punchstunthreshold = 3
 	siemens_coeff = 2 //snails are mostly water
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_PRIDE | MIRROR_MAGIC | RACE_SWAP | ERT_SPAWN | SLIME_EXTRACT
 	sexes = FALSE //snails are hermaphrodites
-	var/shell_type = /obj/item/storage/backpack/snail
 
+	// Internal Organs
 	mutanteyes = /obj/item/organ/eyes/snail
 	mutanttongue = /obj/item/organ/tongue/snail
 	exotic_blood = /datum/reagent/lube
 
-	species_chest = /obj/item/bodypart/chest/snail
-	species_head = /obj/item/bodypart/head/snail
-	species_l_arm = /obj/item/bodypart/l_arm/snail
-	species_r_arm = /obj/item/bodypart/r_arm/snail
-	species_l_leg = /obj/item/bodypart/l_leg/snail
-	species_r_leg = /obj/item/bodypart/r_leg/snail
+	// Bodyparts
+	bodypart_overrides = list(
+		BODY_ZONE_HEAD = /obj/item/bodypart/head/snail,
+		BODY_ZONE_CHEST = /obj/item/bodypart/chest/snail,
+		BODY_ZONE_L_ARM = /obj/item/bodypart/l_arm/snail,
+		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm/snail,
+		BODY_ZONE_L_LEG = /obj/item/bodypart/l_leg/snail,
+		BODY_ZONE_R_LEG = /obj/item/bodypart/r_leg/snail,
+		)
+
+	// Variables Unique to the Species
+	var/shell_type = /obj/item/storage/backpack/snail
+
 
 /datum/species/snail/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(istype(chem,/datum/reagent/consumable/sodiumchloride))

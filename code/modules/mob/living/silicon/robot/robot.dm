@@ -108,6 +108,8 @@
 	spark_system.set_up(5, 0, src)
 	spark_system.attach(src)
 
+	ADD_TRAIT(src, TRAIT_CAN_STRIP, INNATE_TRAIT)
+
 	wires = new /datum/wires/robot(src)
 	AddComponent(/datum/component/empprotection, EMP_PROTECT_WIRES)
 	RegisterSignal(src, COMSIG_PROCESS_BORGCHARGER_OCCUPANT, .proc/charge)
@@ -568,36 +570,36 @@
 /mob/living/silicon/robot/proc/allowed(mob/M)
 	//check if it doesn't require any access at all
 	if(check_access(null))
-		return 1
+		return TRUE
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		//if they are holding or wearing a card that has access, that works
 		if(check_access(H.get_active_held_item()) || check_access(H.wear_id))
-			return 1
-	else if(ismonkey(M))
-		var/mob/living/carbon/monkey/george = M
+			return TRUE
+	else if(isalien(M))
+		var/mob/living/carbon/george = M
 		//they can only hold things :(
 		if(isitem(george.get_active_held_item()))
 			return check_access(george.get_active_held_item())
-	return 0
+	return FALSE
 
 /mob/living/silicon/robot/proc/check_access(obj/item/card/id/I)
 	if(!istype(req_access, /list)) //something's very wrong
-		return 1
+		return TRUE
 
 	var/list/L = req_access
 	if(!L.len) //no requirements
-		return 1
+		return TRUE
 
 	if(!istype(I, /obj/item/card/id) && isitem(I))
 		I = I.GetID()
 
 	if(!I || !I.access) //not ID or no access
-		return 0
+		return FALSE
 	for(var/req in req_access)
 		if(!(req in I.access)) //doesn't have this access
 			return 0
-	return 1
+	return TRUE
 
 /mob/living/silicon/robot/regenerate_icons()
 	return update_icons()

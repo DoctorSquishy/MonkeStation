@@ -3,17 +3,26 @@
 	id = "dullahan"
 	max_bodypart_count = 5 //No head
 	default_color = "FFFFFF"
-	species_traits = list(SKINTONES,EYECOLOR,HAIR,FACEHAIR,LIPS)
-	inherent_traits = list(TRAIT_NOHUNGER,TRAIT_NOBREATH, TRAIT_NONECRODISEASE)
+	species_traits = list(SKINTONES, EYECOLOR, HAIR, FACEHAIR, LIPS)
+	inherent_traits = list(
+		TRAIT_NOHUNGER,
+		TRAIT_ADVANCEDTOOLUSER,
+		TRAIT_NOBREATH,
+		TRAIT_NONECRODISEASE,
+	)
+	inherent_biotypes = list(MOB_UNDEAD,MOB_HUMANOID)
 	default_features = list("mcolor" = "FFF", "tail_human" = "None", "ears" = "None", "wings" = "None", "body_size" = "Normal")
-	mutant_brain = /obj/item/organ/brain/dullahan
-	mutanteyes = /obj/item/organ/eyes/dullahan
-	mutanttongue = /obj/item/organ/tongue/dullahan
-	mutantears = /obj/item/organ/ears/dullahan
 	examine_limb_id = SPECIES_HUMAN
 	skinned_type = /obj/item/stack/sheet/animalhide/human
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_PRIDE | MIRROR_MAGIC | ERT_SPAWN
 
+	// Internal Organs
+	mutant_brain = /obj/item/organ/brain/dullahan
+	mutanteyes = /obj/item/organ/eyes/dullahan
+	mutanttongue = /obj/item/organ/tongue/dullahan
+	mutantears = /obj/item/organ/ears/dullahan
+
+	// Variables Unique to the Species
 	var/obj/item/dullahan_relay/myhead
 
 

@@ -67,7 +67,7 @@
 /turf/open/floor/plating/rust,
 /area/template_noop)
 "y" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plating,
 /area/template_noop)
 "B" = (
@@ -85,7 +85,7 @@
 /turf/open/floor/plating,
 /area/template_noop)
 "S" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel,
 /area/template_noop)
 "U" = (

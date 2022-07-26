@@ -15,18 +15,23 @@
 	liked_food = VEGETABLES | DAIRY | CLOTH
 	disliked_food = FRUIT | GROSS
 	toxic_food = MEAT | RAW
-	mutanteyes = /obj/item/organ/eyes/moth
-	mutantwings = /obj/item/organ/wings/moth
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_MAGIC | MIRROR_PRIDE | ERT_SPAWN | RACE_SWAP | SLIME_EXTRACT
 	species_language_holder = /datum/language_holder/moth
 	inert_mutation = STRONGWINGS
 
-	species_chest = /obj/item/bodypart/chest/moth
-	species_head = /obj/item/bodypart/head/moth
-	species_l_arm = /obj/item/bodypart/l_arm/moth
-	species_r_arm = /obj/item/bodypart/r_arm/moth
-	species_l_leg = /obj/item/bodypart/l_leg/moth
-	species_r_leg = /obj/item/bodypart/r_leg/moth
+	// Internal Organs
+	mutanteyes = /obj/item/organ/eyes/moth
+	mutantwings = /obj/item/organ/wings/moth
+
+	// Bodyparts
+	bodypart_overrides = list(
+		BODY_ZONE_HEAD = /obj/item/bodypart/head/moth,
+		BODY_ZONE_CHEST = /obj/item/bodypart/chest/moth,
+		BODY_ZONE_L_ARM = /obj/item/bodypart/l_arm/moth,
+		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm/moth,
+		BODY_ZONE_L_LEG = /obj/item/bodypart/l_leg/moth,
+		BODY_ZONE_R_LEG = /obj/item/bodypart/r_leg/moth,
+		)
 
 /datum/species/moth/random_name(gender, unique, lastname, attempts)
 	. = "[pick(GLOB.moth_first)]"

@@ -242,7 +242,7 @@
 	return TRUE
 
 
-/mob/living/attack_paw(mob/living/carbon/monkey/M)
+/mob/living/attack_paw(mob/living/carbon/human/M)
 	if(isturf(loc) && istype(loc.loc, /area/start))
 		to_chat(M, "No attacking people at spawn, you jackass.")
 		return FALSE
@@ -287,8 +287,8 @@
 								"<span class='userdanger'>[L.name]'s bite misses you!</span>", null, COMBAT_MESSAGE_RANGE)
 	return FALSE
 
-/mob/living/attack_alien(mob/living/carbon/alien/humanoid/M)
-	SEND_SIGNAL(src, COMSIG_MOB_ATTACK_ALIEN, M)
+/mob/living/attack_alien(mob/living/carbon/alien/humanoid/M, list/modifiers)
+	SEND_SIGNAL(src, COMSIG_MOB_ATTACK_ALIEN, M, modifiers)
 	switch(M.a_intent)
 		if ("help")
 			visible_message("<span class='notice'>[M] caresses [src] with its scythe-like arm.</span>", \

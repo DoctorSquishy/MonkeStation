@@ -588,7 +588,7 @@ im not even gonna bother with these for the following symptoms. typed em out, co
 	anchored = FALSE
 
 	antagonist_type = /datum/antagonist/teratoma/hugbox
-	mob_type = /mob/living/carbon/monkey/tumor
+	mob_type = /mob/living/carbon/human/species/monkey/tumor
 	mob_name = "a living tumor"
 	death = FALSE
 	roundstart = FALSE

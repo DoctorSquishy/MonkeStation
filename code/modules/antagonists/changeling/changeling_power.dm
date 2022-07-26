@@ -45,41 +45,38 @@ the same goes for Remove(). if you override Remove(), call parent or else your p
 
 /datum/action/changeling/proc/sting_action(mob/user, mob/target)
 	SSblackbox.record_feedback("nested tally", "changeling_powers", 1, list("[name]"))
-	return 0
+	return FALSE
 
 /datum/action/changeling/proc/sting_feedback(mob/user, mob/target)
-	return 0
+	return FALSE
 
 //Fairly important to remember to return 1 on success >.<
 
 /datum/action/changeling/proc/can_sting(mob/living/user, mob/target)
-	if(!ishuman(user) && !ismonkey(user)) //typecast everything from mob to carbon from this point onwards
-		return 0
-	if(req_human && !ishuman(user))
-		to_chat(user, "<span class='warning'>We cannot do that in this form!</span>")
-		return 0
+	if(!ishuman(user)) //typecast everything from mob to carbon from this point onwards
+		return FALSE
 	var/datum/antagonist/changeling/c = user.mind.has_antag_datum(/datum/antagonist/changeling)
 	if(c.chem_charges < chemical_cost)
 		to_chat(user, "<span class='warning'>We require at least [chemical_cost] unit\s of chemicals to do that!</span>")
-		return 0
+		return FALSE
 	if(c.absorbedcount < req_dna)
 		to_chat(user, "<span class='warning'>We require at least [req_dna] sample\s of compatible DNA.</span>")
-		return 0
+		return FALSE
 	if(c.trueabsorbs < req_absorbs)
 		to_chat(user, "<span class='warning'>We require at least [req_absorbs] sample\s of DNA gained through our Absorb ability.</span>")
-		return 0
+		return FALSE
 	if(req_stat < user.stat)
 		to_chat(user, "<span class='warning'>We are incapacitated.</span>")
-		return 0
+		return FALSE
 	if((HAS_TRAIT(user, TRAIT_DEATHCOMA)) && (!ignores_fakedeath))
 		to_chat(user, "<span class='warning'>We are incapacitated.</span>")
-		return 0
-	return 1
+		return FALSE
+	return TRUE
 
 /datum/action/changeling/proc/can_be_used_by(mob/user)
 	if(!user || QDELETED(user))
-		return 0
-	if(!ishuman(user) && !ismonkey(user))
+		return FALSE
+	if(!ishuman(user))
 		return FALSE
 	if(req_human && !ishuman(user))
 		return FALSE

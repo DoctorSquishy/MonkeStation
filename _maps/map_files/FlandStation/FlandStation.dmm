@@ -8983,7 +8983,7 @@
 /turf/open/floor/plating,
 /area/maintenance/aft)
 "cbI" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /obj/machinery/light{
 	dir = 8
 	},
@@ -11703,7 +11703,7 @@
 /turf/open/floor/plasteel/cafeteria,
 /area/vacant_room/commissary/commissaryFood)
 "cGh" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /obj/effect/turf_decal/stripes/line{
 	dir = 1
 	},
@@ -14690,7 +14690,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /obj/effect/turf_decal/stripes/line{
 	dir = 5
 	},
@@ -15274,7 +15274,7 @@
 /turf/open/floor/plating,
 /area/engine/atmos)
 "dwG" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /obj/machinery/light,
 /turf/open/floor/vault,
 /area/medical/genetics)
@@ -38745,7 +38745,7 @@
 /obj/effect/turf_decal/trimline/red/filled/line{
 	dir = 5
 	},
-/mob/living/carbon/monkey{
+/mob/living/carbon/human/species/monkey{
 	name = "Ook";
 	unique_name = 0
 	},
@@ -80769,7 +80769,7 @@
 	id = "kitchencounter";
 	name = "Kitchen Counter Shutters"
 	},
-/mob/living/carbon/monkey/punpun,
+/mob/living/carbon/human/species/monkey/punpun,
 /obj/machinery/door/firedoor,
 /turf/open/floor/plasteel/techmaint,
 /area/crew_quarters/kitchen)
@@ -97305,7 +97305,7 @@
 /turf/open/floor/plasteel/grid/steel,
 /area/science/xenobiology)
 "wSj" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/grid/steel,
 /area/medical/virology)
 "wSm" = (

@@ -29,7 +29,6 @@ GLOBAL_LIST_EMPTY(frills_list)
 GLOBAL_LIST_EMPTY(spines_list)
 GLOBAL_LIST_EMPTY(legs_list)
 GLOBAL_LIST_EMPTY(animated_spines_list)
-GLOBAL_LIST_EMPTY(tails_list_monkey)//monkestation edit: add simian species
 
 	//Mutant Human bits
 GLOBAL_LIST_EMPTY(tails_list_human)
@@ -41,9 +40,13 @@ GLOBAL_LIST_EMPTY(r_wings_list)
 GLOBAL_LIST_EMPTY(moth_wings_list)
 GLOBAL_LIST_EMPTY(moth_wingsopen_list)
 GLOBAL_LIST_EMPTY(caps_list)
+
+GLOBAL_LIST_EMPTY(tails_list_monkey) //monkestation edit: add simian species
+
 GLOBAL_LIST_EMPTY(ipc_screens_list)
 GLOBAL_LIST_EMPTY(ipc_antennas_list)
 GLOBAL_LIST_EMPTY(ipc_chassis_list)
+
 GLOBAL_LIST_EMPTY(insect_type_list)
 
 GLOBAL_LIST_INIT(color_list_ethereal, list(

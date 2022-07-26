@@ -8,9 +8,6 @@
 	inherent_traits = list(TRAIT_VAULTING, TRAIT_KLEPTOMANIAC, TRAIT_MONKEYFRIEND)
 	alt_eye = 'monkestation/icons/mob/species/simian/bodyparts.dmi'
 	inherent_biotypes = list(MOB_ORGANIC, MOB_HUMANOID)
-	mutant_bodyparts = list("tail_monkey")
-	mutanttongue = /obj/item/organ/tongue/monkey
-	mutanttail = /obj/item/organ/tail/monkey
 	default_features = list("tail_monkey" = "Chimp")
 	skin_tone_list = "simian"
 	changesource_flags = MIRROR_BADMIN | MIRROR_PRIDE | MIRROR_MAGIC | RACE_SWAP | ERT_SPAWN
@@ -23,14 +20,42 @@
 	maxhealthmod = 0.85 //small = weak
 	staminamod = 0.7
 	speedmod = -0.1 //lil bit faster
-	offset_features = list(OFFSET_UNIFORM = list(0,0), OFFSET_ID = list(0,3), OFFSET_GLOVES = list(0,0), OFFSET_GLASSES = list(0,0), OFFSET_EARS = list(0,2), OFFSET_SHOES = list(0,0), OFFSET_S_STORE = list(0,0), OFFSET_FACEMASK = list(0,0), OFFSET_HEAD = list(0,0), OFFSET_FACE = list(0,0), OFFSET_BELT = list(0,0), OFFSET_BACK = list(0,0), OFFSET_SUIT = list(0,0), OFFSET_NECK = list(0,0), OFFSET_RIGHT_HAND = list(0,3), OFFSET_LEFT_HAND = list(0,3)) //im sorry
+	offset_features = list(
+		OFFSET_UNIFORM = list(0,0),
+		OFFSET_ID = list(0,3),
+		OFFSET_GLOVES = list(0,0),
+		OFFSET_GLASSES = list(0,0),
+		OFFSET_EARS = list(0,2),
+		OFFSET_SHOES = list(0,0),
+		OFFSET_S_STORE = list(0,0),
+		OFFSET_FACEMASK = list(0,0),
+		OFFSET_HEAD = list(0,0),
+		OFFSET_FACE = list(0,0),
+		OFFSET_BELT = list(0,0),
+		OFFSET_BACK = list(0,0),
+		OFFSET_SUIT = list(0,0),
+		OFFSET_NECK = list(0,0),
+		OFFSET_RIGHT_HAND = list(0,3),
+		OFFSET_LEFT_HAND = list(0,3)
+		) //im sorry
 
-	species_chest = /obj/item/bodypart/chest/simian
-	species_head = /obj/item/bodypart/head/simian
-	species_l_arm = /obj/item/bodypart/l_arm/simian
-	species_r_arm = /obj/item/bodypart/r_arm/simian
-	species_l_leg = /obj/item/bodypart/l_leg/simian
-	species_r_leg = /obj/item/bodypart/r_leg/simian
+
+	// Internal Organs
+	mutanttongue = /obj/item/organ/tongue/monkey
+
+	// External Organs
+	mutanttail = /obj/item/organ/tail/monkey
+	mutant_bodyparts = list("tail_monkey")
+
+	// Bodyparts
+	bodypart_overrides = list(
+		BODY_ZONE_HEAD = /obj/item/bodypart/head/simian,
+		BODY_ZONE_CHEST = /obj/item/bodypart/chest/simian,
+		BODY_ZONE_L_ARM = /obj/item/bodypart/l_arm/simian,
+		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm/simian,
+		BODY_ZONE_L_LEG = /obj/item/bodypart/l_leg/simian,
+		BODY_ZONE_R_LEG = /obj/item/bodypart/r_leg/simian,
+		)
 
 /datum/species/simian/on_species_gain(mob/living/carbon/C, datum/species/old_species, pref_load)
 	. = ..()

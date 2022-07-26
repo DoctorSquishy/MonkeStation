@@ -41,7 +41,6 @@
 	var/busy = SPIDER_IDLE
 	pass_flags = PASSTABLE
 	move_to_delay = 6
-	ventcrawler = VENTCRAWLER_ALWAYS
 	attacktext = "bites"
 	attack_sound = 'sound/weapons/bite.ogg'
 	unique_name = 1
@@ -58,6 +57,7 @@
 	. = ..()
 	lay_web = new
 	lay_web.Grant(src)
+	ADD_TRAIT(src, TRAIT_VENTCRAWLER_ALWAYS, INNATE_TRAIT)
 
 /mob/living/simple_animal/hostile/poison/giant_spider/Destroy()
 	QDEL_NULL(lay_web)

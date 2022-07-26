@@ -275,7 +275,7 @@
 /turf/open/floor/wood,
 /area/crew_quarters/bar)
 "K" = (
-/mob/living/carbon/monkey/punpun,
+/mob/living/carbon/human/species/monkey/punpun,
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/wood,
 /area/crew_quarters/bar)

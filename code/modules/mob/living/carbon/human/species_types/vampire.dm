@@ -3,15 +3,23 @@
 	id = "vampire"
 	default_color = "FFFFFF"
 	species_traits = list(SKINTONES,EYECOLOR,HAIR,FACEHAIR,LIPS,DRINKSBLOOD)
-	inherent_traits = list(TRAIT_NOHUNGER,TRAIT_NOBREATH)
-	inherent_biotypes = list(MOB_UNDEAD, MOB_HUMANOID)
+	inherent_traits = list(
+		TRAIT_ADVANCEDTOOLUSER,
+		TRAIT_NOHUNGER,
+		TRAIT_NOBREATH
+		)
+	inherent_biotypes = list(MOB_UNDEAD,MOB_HUMANOID)
 	default_features = list("mcolor" = "FFF", "tail_human" = "None", "ears" = "None", "wings" = "None", "body_size" = "Normal")
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_PRIDE | MIRROR_MAGIC | ERT_SPAWN
 	exotic_bloodtype = "U"
-	mutant_heart = /obj/item/organ/heart/vampire
-	mutanttongue = /obj/item/organ/tongue/vampire
 	examine_limb_id = SPECIES_HUMAN
 	skinned_type = /obj/item/stack/sheet/animalhide/human
+
+	// Internal Organs
+	mutant_heart = /obj/item/organ/heart/vampire
+	mutanttongue = /obj/item/organ/tongue/vampire
+
+	// Variables Unique to the Species
 	var/info_text = "You are a <span class='danger'>Vampire</span>. You will slowly but constantly lose blood if outside of a coffin. If inside a coffin, you will slowly heal. You may gain more blood by grabbing a live victim and using your drain ability."
 	var/obj/effect/proc_holder/spell/targeted/shapeshift/bat/batform //attached to the datum itself to avoid cloning memes, and other duplicates
 

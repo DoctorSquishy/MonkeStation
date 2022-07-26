@@ -206,7 +206,7 @@
 		var/mob/living/carbon/human/H = user
 		H.dna.species.spec_attack_hand(H, src)
 
-/mob/living/carbon/human/attack_paw(mob/living/carbon/monkey/M)
+/mob/living/carbon/human/attack_paw(mob/living/carbon/human/M)
 	if(check_shields(M, 0, "the [M.name]", UNARMED_ATTACK))
 		visible_message("<span class='danger'>[M] attempts to touch [src]!</span>", \
 			"<span class='danger'>[M] attempts to touch you!</span>")
@@ -215,23 +215,28 @@
 	var/obj/item/bodypart/affecting = get_bodypart(ran_zone(dam_zone))
 	if(!affecting)
 		affecting = get_bodypart(BODY_ZONE_CHEST)
+
 	if(M.a_intent == INTENT_HELP)
 		..() //shaking
-		return 0
+		return FALSE
 
 	if(M.a_intent == INTENT_DISARM) //the fact that this fucking works is hilarious to me
 		dna.species.disarm(M, src)
-		return 1
+		return TRUE
 
 	if(M.limb_destroyer)
 		dismembering_strike(M, affecting.body_zone)
 
-	if(can_inject(M, 1, affecting))//Thick suits can stop monkey bites.
+	if(can_inject(M, 1, affecting)) //Thick suits can stop monkey bites.
 		if(..()) //successful monkey bite, this handles disease contraction.
-			var/damage = rand(1, 3)
+			var/damage = rand(M.dna.species.punchdamagelow, M.dna.species.punchdamagehigh)
+			if(!damage)
+				return
+			if(check_shields(M, damage, "the [M.name]"))
+				return FALSE
 			if(stat != DEAD)
-				apply_damage(damage, BRUTE, affecting, run_armor_check(affecting, "melee"))
-		return 1
+				apply_damage(damage, BRUTE, affecting, run_armor_check(affecting, MELEE))
+		return TRUE
 
 /mob/living/carbon/human/attack_alien(mob/living/carbon/alien/humanoid/M)
 	if(check_shields(M, 20, "the [M.name]", UNARMED_ATTACK))

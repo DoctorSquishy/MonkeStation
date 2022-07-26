@@ -10,45 +10,103 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	var/bodytype = BODYTYPE_HUMANOID
 	var/sexes = 1		// whether or not the race has sexual characteristics. at the moment this is only 0 for skeletons and shadows
 
-	var/list/offset_features = list(OFFSET_UNIFORM = list(0,0), OFFSET_ID = list(0,0), OFFSET_GLOVES = list(0,0), OFFSET_GLASSES = list(0,0), OFFSET_EARS = list(0,0), OFFSET_SHOES = list(0,0), OFFSET_S_STORE = list(0,0), OFFSET_FACEMASK = list(0,0), OFFSET_HEAD = list(0,0), OFFSET_FACE = list(0,0), OFFSET_BELT = list(0,0), OFFSET_BACK = list(0,0), OFFSET_SUIT = list(0,0), OFFSET_NECK = list(0,0), OFFSET_RIGHT_HAND = list(0,0), OFFSET_LEFT_HAND = list(0,0))
+	var/list/offset_features = list(
+		OFFSET_UNIFORM = list(0,0),
+		OFFSET_ID = list(0,0),
+		OFFSET_GLOVES = list(0,0),
+		OFFSET_GLASSES = list(0,0),
+		OFFSET_EARS = list(0,0),
+		OFFSET_SHOES = list(0,0),
+		OFFSET_S_STORE = list(0,0),
+		OFFSET_FACEMASK = list(0,0),
+		OFFSET_HEAD = list(0,0),
+		OFFSET_FACE = list(0,0),
+		OFFSET_BELT = list(0,0),
+		OFFSET_BACK = list(0,0),
+		OFFSET_SUIT = list(0,0),
+		OFFSET_NECK = list(0,0),
+		OFFSET_RIGHT_HAND = list(0,0),
+		OFFSET_LEFT_HAND = list(0,0)
+		)
+
 	var/max_bodypart_count = 6 //The maximum number of bodyparts this species can have.
-	var/hair_color	// this allows races to have specific hair colors... if null, it uses the H's hair/facial hair colors. if "mutcolor", it uses the H's mutant_color
-	var/hair_alpha = 255	// the alpha used by the hair. 255 is completely solid, 0 is transparent.
+	var/digitigrade_customization = DIGITIGRADE_NEVER //Never, Optional, or Forced digi legs?
 	var/examine_limb_id //This is used for children, felinids and ashwalkers namely
 
-	var/digitigrade_customization = DIGITIGRADE_NEVER //Never, Optional, or Forced digi legs?
+	var/hair_color	// this allows races to have specific hair colors... if null, it uses the H's hair/facial hair colors. if "mutcolor", it uses the H's mutant_color
+	var/hair_alpha = 255	// the alpha used by the hair. 255 is completely solid, 0 is transparent.
+
 	var/skin_tone_list = "human" //monkestation edit: add species specific skin tones - defaults to human
 	var/dyncolor = "" // if you use Dyncolor and are not ethereal, use this
 	var/exotic_blood = ""	// If your race wants to bleed something other than bog standard blood, change this to reagent id.
 	var/exotic_bloodtype = "" //If your race uses a non standard bloodtype (A+, O-, AB-, etc)
+
 	var/meat = /obj/item/food/meat/slab/human //What the species drops on gibbing
 	var/skinned_type
+
 	var/liked_food = NONE
 	var/disliked_food = GROSS
 	var/toxic_food = TOXIC
+
 	var/list/no_equip = list()	// slots the race can't equip stuff to
 	var/nojumpsuit = 0	// this is sorta... weird. it basically lets you equip stuff that usually needs jumpsuits without one, like belts and pockets and ids
+
 	var/say_mod = "says"	// affects the speech message
 	var/species_language_holder = /datum/language_holder
+
 	var/alt_eye //alternate eye directory; monkestation edit: add simians
 	var/list/default_features = list("body_size" = "Normal") // Default mutant bodyparts for this species. Don't forget to set one for every mutant bodypart you allow this species to have.
 	var/list/forced_features = list()	// A list of features forced on characters
-	var/list/mutant_bodyparts = list() 	// Visible CURRENT bodyparts that are unique to a species. DO NOT USE THIS AS A LIST OF ALL POSSIBLE BODYPARTS AS IT WILL FUCK SHIT UP! Changes to this list for non-species specific bodyparts (ie cat ears and tails) should be assigned at organ level if possible. Layer hiding is handled by handle_mutant_bodyparts() below.
-	var/list/mutant_organs = list()		//Internal organs that are unique to this race.
-	var/speedmod = 0	// this affects the race's speed. positive numbers make it move slower, negative numbers make it move faster
-	var/armor = 0		// overall defense for the race... or less defense, if it's negative.
-	var/brutemod = 1	// multiplier for brute damage
-	var/burnmod = 1		// multiplier for burn damage
-	var/coldmod = 1		// multiplier for cold damage
-	var/heatmod = 1		// multiplier for heat damage
+
+	/**
+	  * Visible CURRENT bodyparts that are unique to a species.
+	  * DO NOT USE THIS AS A LIST OF ALL POSSIBLE BODYPARTS AS IT WILL FUCK
+	  * SHIT UP! Changes to this list for non-species specific bodyparts (ie
+	  * cat ears and tails) should be assigned at organ level if possible.
+	  * Assoc values are defaults for given bodyparts, also modified by aforementioned organs.
+	  * They also allow for faster '[]' list access versus 'in'. Other than that, they are useless right now.
+	  * Layer hiding is handled by [/datum/species/proc/handle_mutant_bodyparts] below.
+	  */
+	var/list/mutant_bodyparts = list()
+
+	///Internal organs that are unique to this race, like a tail.
+	var/list/mutant_organs = list()
+
+	///The bodyparts this species uses. assoc of bodypart string - bodypart type. Make sure all the fucking entries are in or I'll skin you alive.
+	var/list/bodypart_overrides = list(
+		BODY_ZONE_L_ARM = /obj/item/bodypart/l_arm,
+		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm,
+		BODY_ZONE_HEAD = /obj/item/bodypart/head,
+		BODY_ZONE_L_LEG = /obj/item/bodypart/l_leg,
+		BODY_ZONE_R_LEG = /obj/item/bodypart/r_leg,
+		BODY_ZONE_CHEST = /obj/item/bodypart/chest,
+	)
+
+	///Multiplier for the race's speed. Positive numbers make it move slower, negative numbers make it move faster.
+	var/speedmod = 0
+	///Percentage modifier for overall defense of the race, or less defense, if it's negative.
+	var/armor = 0
+	///multiplier for brute damage
+	var/brutemod = 1
+	///multiplier for burn damage
+	var/burnmod = 1
+	///multiplier for damage from cold temperature
+	var/coldmod = 1
+	///multiplier for damage from hot temperature
+	var/heatmod = 1
+	///multiplier for stun durations
 	var/stunmod = 1
+
 	var/oxymod = 1
 	var/clonemod = 1
 	var/toxmod = 1
 	var/staminamod = 1		// multiplier for stun duration
 	var/maxhealthmod = 1 //multiplier for overriding max health
 	var/attack_type = BRUTE //Type of damage attack does
-	var/punchdamage = 7      //highest possible punch damage
+	///Lowest possible punch damage this species can give. If this is set to 0, punches will always miss.
+	var/punchdamagelow = 1
+	///Highest possible punch damage this species can give.
+	var/punchdamagehigh = 7
 	var/siemens_coeff = 1 //base electrocution coefficient
 	var/damage_overlay_type = "human" //what kind of damage overlays (if any) appear on our species when wounded?
 	var/fixed_mut_color = "" //to use MUTCOLOR with a fixed color that's independent of dna.feature["mcolor"]
@@ -65,8 +123,9 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	// species-only traits. Can be found in DNA.dm
 	var/list/species_traits = list()
 	// generic traits tied to having the species
-	var/list/inherent_traits = list()
-	var/list/inherent_biotypes = list(MOB_ORGANIC, MOB_HUMANOID)
+	var/list/inherent_traits = list(TRAIT_ADVANCEDTOOLUSER, TRAIT_CAN_STRIP)
+	/// List of biotypes the mob belongs to. Used by diseases.
+	var/inherent_biotypes = list(MOB_ORGANIC,MOB_HUMANOID)
 	///List of factions the mob gain upon gaining this species.
 	var/list/inherent_factions
 
@@ -78,28 +137,37 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	var/obj/item/organ/lungs/mutantlungs = null
 	var/breathid = "o2"
 
+	///What anim to use for dusting
+	var/dust_anim = "dust-h"
+	///What anim to use for gibbing
+	var/gib_anim = "gibbed-h"
+
+
+	//Do NOT remove by setting to null. use OR make a RESPECTIVE TRAIT (removing stomach? add the NOSTOMACH trait to your species)
+	//why does it work this way? because traits also disable the downsides of not having an organ, removing organs but not having the trait will make your species die
+
+	///Replaces default brain with a different organ
 	var/obj/item/organ/brain/mutant_brain = /obj/item/organ/brain
+	///Replaces default heart with a different organ
 	var/obj/item/organ/heart/mutant_heart = /obj/item/organ/heart
+	///Replaces default eyes with a different organ
 	var/obj/item/organ/eyes/mutanteyes = /obj/item/organ/eyes
+	///Replaces default ears with a different organ
 	var/obj/item/organ/ears/mutantears = /obj/item/organ/ears
-	var/obj/item/mutanthands
+	///Replaces default tongue with a different organ
 	var/obj/item/organ/tongue/mutanttongue = /obj/item/organ/tongue
+
 	var/obj/item/organ/tail/mutanttail = null
 	var/obj/item/organ/wings/mutantwings = null
-
 	var/obj/item/organ/liver/mutantliver
 	var/obj/item/organ/stomach/mutantstomach
+
+	///Forces an item into this species' hands. Only an honorary mutantthing because this is not an organ and not loaded in the same way, you've been warned to do your research.
+	var/obj/item/mutanthands
+
 	var/override_float = FALSE
 	//MonkeStation Edit: Butt Organ
 	var/obj/item/organ/butt/mutant_butt = /obj/item/organ/butt
-
-	//Bitflag that controls what in game ways can select this species as a spawnable source
-	//Think magic mirror and pride mirror, slime extract, ERT etc, see defines
-	//in __DEFINES/mobs.dm, defaults to NONE, so people actually have to think about it
-	var/changesource_flags = NONE
-
-	//The component to add when swimming
-	var/swimming_component = /datum/component/swimming
 
 	//K-Limbs. If a species doesn't have their own limb types. Do not override this, use the K-Limbs overrides at the top of the species datum.
 	var/obj/item/bodypart/species_chest = /obj/item/bodypart/chest
@@ -108,6 +176,18 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	var/obj/item/bodypart/species_r_arm = /obj/item/bodypart/r_arm
 	var/obj/item/bodypart/species_r_leg = /obj/item/bodypart/r_leg
 	var/obj/item/bodypart/species_l_leg = /obj/item/bodypart/l_leg
+
+	//Bitflag that controls what in game ways can select this species as a spawnable source
+	//Think magic mirror and pride mirror, slime extract, ERT etc, see defines
+	//in __DEFINES/mobs.dm, defaults to NONE, so people actually have to think about it
+	var/changesource_flags = NONE
+
+	//The component to add when swimming
+	var/swimming_component = /datum/component/swimming
+	///List of results you get from knife-butchering. null means you cant butcher it. Associated by resulting type - value of amount
+	var/list/knife_butcher_results
+
+
 
 ///////////
 // PROCS //
@@ -305,49 +385,26 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 		var/obj/item/organ/I = new path()
 		I.Insert(C)
 
-/datum/species/proc/replace_body(mob/living/carbon/C, var/datum/species/new_species)
-	new_species ||= C.dna.species //If no new species is provided, assume its src.
+///Handles replacing all of the bodyparts with their species version during set_species()
+/datum/species/proc/replace_body(mob/living/carbon/target, datum/species/new_species)
+	new_species ||= target.dna.species //If no new species is provided, assume its src.
 	//Note for future: Potentionally add a new C.dna.species() to build a template species for more accurate limb replacement
 
-	if((new_species.digitigrade_customization == DIGITIGRADE_OPTIONAL && C.dna.features["legs"] == "Digitigrade Legs") || new_species.digitigrade_customization == DIGITIGRADE_FORCED)
-		new_species.species_r_leg = /obj/item/bodypart/r_leg/digitigrade
-		new_species.species_l_leg = /obj/item/bodypart/l_leg/digitigrade
+	if((new_species.digitigrade_customization == DIGITIGRADE_OPTIONAL && target.dna.features["legs"] == "Digitigrade Legs") || new_species.digitigrade_customization == DIGITIGRADE_FORCED)
+		new_species.bodypart_overrides[BODY_ZONE_R_LEG] = /obj/item/bodypart/r_leg/digitigrade
+		new_species.bodypart_overrides[BODY_ZONE_L_LEG] = /obj/item/bodypart/l_leg/digitigrade
 
-	for(var/obj/item/bodypart/old_part as() in C.bodyparts)
+	for(var/obj/item/bodypart/old_part as anything in target.bodyparts)
 		if(old_part.change_exempt_flags & BP_BLOCK_CHANGE_SPECIES)
 			continue
 
-		switch(old_part.body_zone)
-			if(BODY_ZONE_HEAD)
-				var/obj/item/bodypart/head/new_part = new new_species.species_head()
-				new_part.replace_limb(C, TRUE)
-				new_part.update_limb(is_creating = TRUE)
-				qdel(old_part)
-			if(BODY_ZONE_CHEST)
-				var/obj/item/bodypart/chest/new_part = new new_species.species_chest()
-				new_part.replace_limb(C, TRUE)
-				new_part.update_limb(is_creating = TRUE)
-				qdel(old_part)
-			if(BODY_ZONE_L_ARM)
-				var/obj/item/bodypart/l_arm/new_part = new new_species.species_l_arm()
-				new_part.replace_limb(C, TRUE)
-				new_part.update_limb(is_creating = TRUE)
-				qdel(old_part)
-			if(BODY_ZONE_R_ARM)
-				var/obj/item/bodypart/r_arm/new_part = new new_species.species_r_arm()
-				new_part.replace_limb(C, TRUE)
-				new_part.update_limb(is_creating = TRUE)
-				qdel(old_part)
-			if(BODY_ZONE_L_LEG)
-				var/obj/item/bodypart/l_leg/new_part = new new_species.species_l_leg()
-				new_part.replace_limb(C, TRUE)
-				new_part.update_limb(is_creating = TRUE)
-				qdel(old_part)
-			if(BODY_ZONE_R_LEG)
-				var/obj/item/bodypart/r_leg/new_part = new new_species.species_r_leg()
-				new_part.replace_limb(C, TRUE)
-				new_part.update_limb(is_creating = TRUE)
-				qdel(old_part)
+		var/path = new_species.bodypart_overrides?[old_part.body_zone]
+		var/obj/item/bodypart/new_part
+		if(path)
+			new_part = new path()
+			new_part.replace_limb(target, TRUE)
+			new_part.update_limb(is_creating = TRUE)
+			qdel(old_part)
 
 
 /datum/species/proc/on_species_gain(mob/living/carbon/C, datum/species/old_species, pref_load)
@@ -1468,10 +1525,15 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 				user.do_attack_animation(target, ATTACK_EFFECT_CLAW)
 			if(ATTACK_EFFECT_SMASH)
 				user.do_attack_animation(target, ATTACK_EFFECT_SMASH)
+			if(ATTACK_EFFECT_BITE)
+				if(user.is_mouth_covered(FALSE, TRUE))
+					to_chat(user, "<span class='warning'>You can't bite with your mouth covered!</span>")
+					return FALSE
+				user.do_attack_animation(target, ATTACK_EFFECT_BITE)
 			else
 				user.do_attack_animation(target, ATTACK_EFFECT_PUNCH)
 
-		var/damage = user.dna.species.punchdamage
+		var/damage = rand(user.dna.species.punchdamagelow, user.dna.species.punchdamagehigh)
 
 		var/obj/item/bodypart/affecting = target.get_bodypart(ran_zone(user.zone_selected))
 
@@ -1504,8 +1566,8 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 			target.apply_damage(damage*1.5, STAMINA, affecting, armor_block)
 			log_combat(user, target, "punched")
 
-/datum/species/proc/spec_unarmedattacked(mob/living/carbon/human/user, mob/living/carbon/human/target)
-	return
+/datum/species/proc/spec_unarmedattacked(mob/living/carbon/human/user, atom/target, modifiers)
+	return FALSE
 
 /datum/species/proc/disarm(mob/living/carbon/user, mob/living/carbon/human/target, datum/martial_art/attacker_style)
 	if(HAS_TRAIT(target, TRAIT_ONEWAYROAD))
@@ -2150,3 +2212,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 
 /datum/species/proc/get_harm_descriptors()
 	return
+
+///Species override for unarmed attacks because the attack_hand proc was made by a mouth-breathing troglodyte on a tricycle. Also to whoever thought it would be a good idea to make it so the original spec_unarmedattack was not actually linked to unarmed attack needs to be checked by a doctor because they clearly have a vast empty space in their head.
+/datum/species/proc/spec_unarmedattack(mob/living/carbon/human/user, atom/target)
+	return FALSE

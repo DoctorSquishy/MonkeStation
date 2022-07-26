@@ -4,7 +4,6 @@
 	icon = 'icons/mob/slimes.dmi'
 	icon_state = "grey baby slime"
 	pass_flags = PASSTABLE | PASSGRILLE
-	ventcrawler = VENTCRAWLER_ALWAYS
 	gender = NEUTER
 	var/is_adult = 0
 	var/docile = 0
@@ -114,6 +113,8 @@
 	set_nutrition(SLIME_DEFAULT_NUTRITION)
 	if(transformeffects & SLIME_EFFECT_LIGHT_PINK)
 		set_playable()
+
+	ADD_TRAIT(src, TRAIT_VENTCRAWLER_ALWAYS, INNATE_TRAIT)
 
 /mob/living/simple_animal/slime/Destroy()
 	set_target(null)
@@ -316,7 +317,7 @@
 		attacked += 10
 
 
-/mob/living/simple_animal/slime/attack_paw(mob/living/carbon/monkey/M)
+/mob/living/simple_animal/slime/attack_paw(mob/living/carbon/human/M)
 	if(..()) //successful monkey bite.
 		attacked += 10
 

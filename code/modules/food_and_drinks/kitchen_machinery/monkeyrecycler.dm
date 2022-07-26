@@ -65,24 +65,24 @@ GLOBAL_LIST_EMPTY(monkey_recyclers)
 	if(ismonkey(target))
 		stuff_monkey_in(target, user)
 
-/obj/machinery/monkey_recycler/proc/stuff_monkey_in(mob/living/carbon/monkey/target, mob/living/user)
+/obj/machinery/monkey_recycler/proc/stuff_monkey_in(mob/living/carbon/human/target, mob/living/user)
 	if(!istype(target))
 		return
 	if(target.stat == CONSCIOUS)
-		to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
+		to_chat(user, span_warning("The monkey is struggling far too much to put it in the recycler."))
 		return
 	if(target.buckled || target.has_buckled_mobs())
-		to_chat(user, "<span class='warning'>The monkey is attached to something.</span>")
+		to_chat(user, span_warning("The monkey is attached to something."))
 		return
 	qdel(target)
-	to_chat(user, "<span class='notice'>You stuff the monkey into the machine.</span>")
-	playsound(src.loc, 'sound/machines/juicer.ogg', 50, 1)
+	to_chat(user, span_notice("You stuff the monkey into the machine."))
+	playsound(src.loc, 'sound/machines/juicer.ogg', 50, TRUE)
 	var/offset = prob(50) ? -2 : 2
 	animate(src, pixel_x = pixel_x + offset, time = 0.2, loop = 200) //start shaking
-	use_power(500)
+	use_power(active_power_usage)
 	stored_matter += cube_production
-	addtimer(VARSET_CALLBACK(src, pixel_x, initial(pixel_x)))
-	addtimer(CALLBACK(GLOBAL_PROC, /proc/to_chat, user, "<span class='notice'>The machine now has [stored_matter] monkey\s worth of material stored.</span>"))
+	addtimer(VARSET_CALLBACK(src, pixel_x, base_pixel_x))
+	addtimer(CALLBACK(GLOBAL_PROC, /proc/to_chat, user, span_notice("The machine now has [stored_matter] monkey\s worth of material stored.")))
 
 /obj/machinery/monkey_recycler/interact(mob/user)
 	if(stored_matter >= 1)

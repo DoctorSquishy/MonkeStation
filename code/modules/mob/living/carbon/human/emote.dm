@@ -120,6 +120,14 @@
 	return pick(options)
 // MonkeStation Edit End
 
+
+/datum/emote/living/carbon/human/scream/screech //If a human tries to screech it'll just scream.
+	key = "screech"
+	key_third_person = "screeches"
+	message = "screeches."
+	emote_type = EMOTE_AUDIBLE
+	vary = FALSE
+
 /datum/emote/living/carbon/human/pale
 	key = "pale"
 	message = "goes pale for a second"

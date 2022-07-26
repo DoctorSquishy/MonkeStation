@@ -137,10 +137,17 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_BADDNA			"baddna"
 #define TRAIT_CLUMSY			"clumsy"
 #define TRAIT_DUMB				"dumb"
-#define TRAIT_MONKEYLIKE		"monkeylike" //sets IsAdvancedToolUser to FALSE
+
+/// Whether a mob is dexterous enough to use machines and certain items or not.
+#define TRAIT_ADVANCEDTOOLUSER "advancedtooluser"
+// Antagonizes the above.
+#define TRAIT_DISCOORDINATED_TOOL_USER "discoordinated_tool_user"
+
 #define TRAIT_PACIFISM			"pacifism"
+
 #define TRAIT_IGNORESLOWDOWN	"ignoreslow"
 #define TRAIT_IGNOREDAMAGESLOWDOWN "ignoredamageslowdown"
+
 #define TRAIT_DEATHCOMA			"deathcoma" //Causes death-like unconsciousness
 #define TRAIT_REGEN_COMA		"regencoma"
 #define TRAIT_FAKEDEATH			"fakedeath" //Makes the owner appear as dead to most forms of medical examination
@@ -271,6 +278,9 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 
 #define TRAIT_AI_BAGATTACK "bagattack" // This atom can ignore the "is on a turf" check for simple AI datum attacks, allowing them to attack from bags or lockers as long as any other conditions are met
 
+/// This mob can strip other mobs.
+#define TRAIT_CAN_STRIP "can_strip"
+
 //quirk traits
 #define TRAIT_ALCOHOL_TOLERANCE	"alcohol_tolerance"
 #define TRAIT_AGEUSIA			"ageusia"
@@ -356,6 +366,7 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define SCRYING_ORB "scrying-orb"
 #define ABDUCTOR_ANTAGONIST "abductor-antagonist"
 #define NUKEOP_TRAIT "nuke-op"
+#define JUNGLE_FEVER_TRAIT "jungle_fever"
 #define DEATHSQUAD_TRAIT "deathsquad"
 #define MEGAFAUNA_TRAIT "megafauna"
 #define CLOWN_NUKE_TRAIT "clown-nuke"
@@ -434,3 +445,14 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_CUSTOMIZABLE_REAGENT_HOLDER "customizable_reagent_holder"
 /// Trait applied by element
 #define ELEMENT_TRAIT "element_trait"
+
+/* Traits for ventcrawling.
+ * Both give access to ventcrawling, but *_NUDE requires the user to be
+ * wearing no clothes and holding no items. If both present, *_ALWAYS
+ * takes precedence.
+ */
+#define TRAIT_VENTCRAWLER_ALWAYS "ventcrawler_always"
+#define TRAIT_VENTCRAWLER_NUDE "ventcrawler_nude"
+
+/// This mob should never close UI even if it doesn't have a client
+#define TRAIT_PRESERVE_UI_WITHOUT_CLIENT "preserve_ui_without_client"

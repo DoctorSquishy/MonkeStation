@@ -17,14 +17,13 @@
 	melee_damage = 15
 	attacktext = "slashes"
 	attack_sound = 'sound/weapons/punch1.ogg'
-	ventcrawler = VENTCRAWLER_ALWAYS
 	unique_name = TRUE
 	faction = list("rat")
 	var/datum/action/cooldown/coffer
 	var/datum/action/cooldown/riot
 	///Number assigned to rats and mice, checked when determining infighting.
 
-/mob/living/simple_animal/hostile/regalrat/Initialize()
+/mob/living/simple_animal/hostile/regalrat/Initialize(mapload)
 	. = ..()
 	coffer = new /datum/action/cooldown/coffer
 	riot = new /datum/action/cooldown/riot
@@ -35,6 +34,7 @@
 		var/mob/dead/observer/C = pick(candidates)
 		key = C.key
 		notify_ghosts("All rise for the rat king, ascendant to the throne in \the [get_area(src)].", source = src, action = NOTIFY_ORBIT, flashwindow = FALSE, header = "Sentient Rat Created")
+	ADD_TRAIT(src, TRAIT_VENTCRAWLER_ALWAYS, INNATE_TRAIT)
 
 /mob/living/simple_animal/hostile/regalrat/handle_automated_action()
 	if(prob(20))
@@ -166,7 +166,6 @@
 	health = 15
 	butcher_results = list(/obj/item/food/meat/slab/mouse = 1)
 	density = FALSE
-	ventcrawler = VENTCRAWLER_ALWAYS
 	pass_flags = PASSTABLE | PASSGRILLE | PASSMOB
 	mob_size = MOB_SIZE_TINY
 	mob_biotypes = list(MOB_ORGANIC, MOB_BEAST)
@@ -175,6 +174,7 @@
 /mob/living/simple_animal/hostile/rat/Initialize()
 	. = ..()
 	SSmobs.cheeserats += src
+	ADD_TRAIT(src, TRAIT_VENTCRAWLER_ALWAYS, INNATE_TRAIT)
 
 /mob/living/simple_animal/hostile/rat/Destroy()
 	SSmobs.cheeserats -= src

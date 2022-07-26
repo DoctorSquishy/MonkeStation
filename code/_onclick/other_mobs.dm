@@ -26,6 +26,8 @@
 		return
 
 	SEND_SIGNAL(src, COMSIG_HUMAN_MELEE_UNARMED_ATTACK, A)
+	if(dna?.species?.spec_unarmedattack(src, A)) //Because species like monkeys dont use attack hand
+		return
 	A.attack_hand(src)
 
 //Return TRUE to cancel other attack hand effects that respect it.
@@ -49,7 +51,7 @@
 /atom/proc/can_interact(mob/user)
 	if(!user.can_interact_with(src))
 		return FALSE
-	if((interaction_flags_atom & INTERACT_ATOM_REQUIRES_DEXTERITY) && !user.IsAdvancedToolUser())
+	if((interaction_flags_atom & INTERACT_ATOM_REQUIRES_DEXTERITY) && !ISADVANCEDTOOLUSER(user))
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return FALSE
 	if(!(interaction_flags_atom & INTERACT_ATOM_IGNORE_INCAPACITATED) && user.incapacitated((interaction_flags_atom & INTERACT_ATOM_IGNORE_RESTRAINED), !(interaction_flags_atom & INTERACT_ATOM_CHECK_GRAB)))
@@ -112,51 +114,10 @@
 /mob/living/RestrainedClickOn(atom/A)
 	return
 
-/*
-	Monkeys
-*/
-/mob/living/carbon/monkey/UnarmedAttack(atom/A)
-	A.attack_paw(src)
-
-/atom/proc/attack_paw(mob/user)
-	if(SEND_SIGNAL(src, COMSIG_ATOM_ATTACK_PAW, user) & COMPONENT_NO_ATTACK_HAND)
+ /atom/proc/attack_paw(mob/user, list/modifiers)
+	if(SEND_SIGNAL(src, COMSIG_ATOM_ATTACK_PAW, user, modifiers) & COMPONENT_NO_ATTACK_HAND)
 		return TRUE
 	return FALSE
-
-/*
-	Monkey RestrainedClickOn() was apparently the
-	one and only use of all of the restrained click code
-	(except to stop you from doing things while handcuffed);
-	moving it here instead of various hand_p's has simplified
-	things considerably
-*/
-/mob/living/carbon/monkey/RestrainedClickOn(atom/A)
-	if(..())
-		return
-	if(a_intent != INTENT_HARM || !ismob(A))
-		return
-	if(is_muzzled())
-		return
-	var/mob/living/carbon/ML = A
-	if(istype(ML))
-		var/dam_zone = pick(BODY_ZONE_CHEST, BODY_ZONE_PRECISE_L_HAND, BODY_ZONE_PRECISE_R_HAND, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG)
-		var/obj/item/bodypart/affecting = null
-		if(ishuman(ML))
-			var/mob/living/carbon/human/H = ML
-			affecting = H.get_bodypart(ran_zone(dam_zone))
-		var/armor = ML.run_armor_check(affecting, "melee")
-		if(prob(75))
-			ML.apply_damage(rand(1,3), BRUTE, affecting, armor)
-			ML.visible_message("<span class='danger'>[name] bites [ML]!</span>", \
-							"<span class='userdanger'>[name] bites you!</span>", null, COMBAT_MESSAGE_RANGE)
-			if(armor >= 2)
-				return
-			for(var/thing in diseases)
-				var/datum/disease/D = thing
-				ML.ForceContractDisease(D)
-		else
-			ML.visible_message("<span class='danger'>[src]'s bite misses [ML]!</span>", \
-							"<span class='danger'>[src]'s bite misses you!</span>", null, COMBAT_MESSAGE_RANGE)
 
 /*
 	Aliens

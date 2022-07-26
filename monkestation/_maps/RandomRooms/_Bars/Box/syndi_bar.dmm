@@ -610,7 +610,7 @@
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4{
 	dir = 8
 	},
-/mob/living/carbon/monkey/punpun,
+/mob/living/carbon/human/species/monkey/punpun,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/turf_decal/monke/tile/bar/tile_half{
 	dir = 10

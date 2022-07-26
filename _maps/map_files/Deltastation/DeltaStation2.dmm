@@ -27414,7 +27414,7 @@
 /obj/effect/turf_decal/tile/red{
 	dir = 8
 	},
-/mob/living/carbon/monkey/punpun,
+/mob/living/carbon/human/species/monkey/punpun,
 /turf/open/floor/plasteel,
 /area/crew_quarters/kitchen)
 "bff" = (
@@ -84091,7 +84091,7 @@
 /obj/effect/turf_decal/stripes/end{
 	dir = 1
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel,
 /area/medical/genetics)
 "dvq" = (
@@ -84822,7 +84822,7 @@
 /obj/effect/turf_decal/stripes/line{
 	dir = 8
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel,
 /area/medical/genetics)
 "dwU" = (
@@ -86253,7 +86253,7 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/turf_decal/stripes/end,
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel,
 /area/medical/genetics)
 "dAa" = (
@@ -95616,7 +95616,7 @@
 /obj/effect/turf_decal/tile/green{
 	dir = 8
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/white,
 /area/medical/virology)
 "dVE" = (
@@ -95652,7 +95652,7 @@
 /obj/effect/turf_decal/tile/green{
 	dir = 4
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/white,
 /area/medical/virology)
 "dVH" = (
@@ -95967,7 +95967,7 @@
 /obj/structure/bed/roller,
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/turf_decal/bot,
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel,
 /area/medical/virology)
 "dWy" = (
@@ -117143,7 +117143,7 @@
 /obj/effect/turf_decal/tile/red{
 	dir = 8
 	},
-/mob/living/carbon/monkey{
+/mob/living/carbon/human/species/monkey{
 	name = "Ook";
 	unique_name = 0
 	},

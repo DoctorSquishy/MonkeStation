@@ -47,7 +47,7 @@
 	return FALSE
 
 /obj/item/dnainjector/attack(mob/target, mob/user)
-	if(!user.IsAdvancedToolUser())
+	if(!ISADVANCEDTOOLUSER(user))
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 	if(used)
@@ -488,7 +488,7 @@
 		var/endtime = world.time+duration
 		for(var/mutation in remove_mutations)
 			if(mutation == RACEMUT)
-				if(ishuman(M))
+				if(ismonkey(M))
 					continue
 				M = M.dna.remove_mutation(mutation)
 			else
@@ -496,7 +496,7 @@
 		for(var/mutation in add_mutations)
 			if(M.dna.get_mutation(mutation))
 				continue //Skip permanent mutations we already have.
-			if(mutation == RACEMUT && ishuman(M))
+			if(mutation == RACEMUT && ismonkey(M))
 				message_admins("[ADMIN_LOOKUPFLW(user)] injected [key_name_admin(M)] with the [name] <span class='danger'>(MONKEY)</span>")
 				log_msg += " (MONKEY)"
 				M = M.dna.add_mutation(mutation, MUT_OTHER, endtime)

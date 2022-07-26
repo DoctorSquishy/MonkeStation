@@ -20,6 +20,10 @@
 ///from base of mob/living/death(): (gibbed)
 #define COMSIG_LIVING_DEATH "living_death"
 
+///from base of mob/living/Write_Memory(): (dead, gibbed)
+#define COMSIG_LIVING_WRITE_MEMORY "living_write_memory"
+	#define COMPONENT_DONT_WRITE_MEMORY (1<<0)
+
 /// From post-can inject check of syringe after attack (mob/user)
 #define COMSIG_LIVING_TRY_SYRINGE "living_try_syringe"
 /// from base of /mob/living/can_track()

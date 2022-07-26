@@ -188,44 +188,37 @@ There are several things that need to be remembered:
 		var/atom/movable/screen/inventory/inv = hud_used.inv_slots[TOBITSHIFT(ITEM_SLOT_GLOVES) + 1]
 		inv.update_icon()
 
-	if(!gloves && bloody_hands)
-		var/mutable_appearance/bloody_overlay
-		if(!dna.species.get_custom_icons("gloves"))//monkestation edit: add simians
-			bloody_overlay += mutable_appearance('icons/effects/blood.dmi', "bloodyhands", -GLOVES_LAYER)
-		else
-			bloody_overlay = mutable_appearance('monkestation/icons/effects/blood.dmi', "[lowertext(dna.species.name)]_bloodyhands")
-		if(get_num_arms(FALSE) < 2)
+	//Bloody hands begin
+	var/mutable_appearance/bloody_overlay = mutable_appearance('icons/effects/blood.dmi', "bloodyhands", -GLOVES_LAYER)
+	cut_overlay(bloody_overlay)
+	if(!gloves && blood_in_hands && (num_hands > 0))
+		bloody_overlay = mutable_appearance('icons/effects/blood.dmi', "bloodyhands", -GLOVES_LAYER)
+		if(num_hands < 2)
 			if(has_left_hand(FALSE))
-				if(!dna.species.get_custom_icons("gloves"))
-					bloody_overlay = mutable_appearance('icons/effects/blood.dmi', "bloodyhands_left", -GLOVES_LAYER)
-				else
-					bloody_overlay = mutable_appearance('monkestation/icons/effects/blood.dmi', "[lowertext(dna.species.name)]_bloodyhands_left")
+				bloody_overlay.icon_state = "bloodyhands_left"
 			else if(has_right_hand(FALSE))
-				if(!dna.species.get_custom_icons("gloves"))
-					bloody_overlay = mutable_appearance('icons/effects/blood.dmi', "bloodyhands_right", -GLOVES_LAYER)
-				else
-					bloody_overlay = mutable_appearance('monkestation/icons/effects/blood.dmi', "[lowertext(dna.species.name)]_bloodyhands_right")
+				bloody_overlay.icon_state = "bloodyhands_right"
 
-		overlays_standing[GLOVES_LAYER] = bloody_overlay
+		add_overlay(bloody_overlay)
+	//Bloody hands end
 
-	var/mutable_appearance/gloves_overlay = overlays_standing[GLOVES_LAYER]
+	var/mutable_appearance/gloves_overlay
 	if(gloves)
-		var/icon_file = 'icons/mob/clothing/hands.dmi'
-		if(istype(gloves, /obj/item/clothing/gloves))
-			var/obj/item/clothing/gloves/G = gloves
-			if(G.sprite_sheets & (dna?.species.bodyflag))
-				icon_file = dna.species.get_custom_icons("gloves")
-		gloves.screen_loc = ui_gloves
-		if(client && hud_used && hud_used.hud_shown)
-			if(hud_used.inventory_shown)
-				client.screen += gloves
-		update_observer_view(gloves,1)
-		overlays_standing[GLOVES_LAYER] = gloves.build_worn_icon(default_layer = GLOVES_LAYER, default_icon_file = icon_file)
-		gloves_overlay = overlays_standing[GLOVES_LAYER]
+		var/obj/item/worn_item = gloves
+		update_hud_gloves(worn_item)
+		var/icon_file
+
+		if(!icon_exists(icon_file, RESOLVE_ICON_STATE(worn_item)))
+			icon_file = 'icons/mob/clothing/hands.dmi'
+
+		gloves_overlay = gloves.build_worn_icon(default_layer = GLOVES_LAYER, default_icon_file = icon_file)
+
+		if(!gloves_overlay)
+			return
 		if(OFFSET_GLOVES in dna.species.offset_features)
 			gloves_overlay.pixel_x += dna.species.offset_features[OFFSET_GLOVES][1]
 			gloves_overlay.pixel_y += dna.species.offset_features[OFFSET_GLOVES][2]
-	overlays_standing[GLOVES_LAYER] = gloves_overlay
+		overlays_standing[GLOVES_LAYER] = gloves_overlay
 	apply_overlay(GLOVES_LAYER)
 
 

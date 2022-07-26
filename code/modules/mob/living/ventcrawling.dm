@@ -7,7 +7,9 @@ GLOBAL_LIST_INIT(ventcrawl_machinery, typecacheof(list(
 //VENTCRAWLING
 
 /mob/living/proc/handle_ventcrawl(atom/A)
-	if(!ventcrawler || !Adjacent(A))
+	if(!Adjacent(A))
+		return
+	if(!HAS_TRAIT(src, TRAIT_VENTCRAWLER_NUDE) && !HAS_TRAIT(src, TRAIT_VENTCRAWLER_ALWAYS))
 		return
 	if(stat)
 		to_chat(src, "You must be conscious to do this!")
@@ -44,6 +46,8 @@ GLOBAL_LIST_INIT(ventcrawl_machinery, typecacheof(list(
 			if(vent_found)
 				break
 
+	// Being able to always ventcrawl trumps being only able to ventcrawl when wearing nothing
+	var/required_nudity = HAS_TRAIT(src, TRAIT_VENTCRAWLER_NUDE) && !HAS_TRAIT(src, TRAIT_VENTCRAWLER_ALWAYS)
 
 	if(vent_found)
 		var/datum/pipeline/vent_found_parent = vent_found.parents[1]
@@ -56,7 +60,7 @@ GLOBAL_LIST_INIT(ventcrawl_machinery, typecacheof(list(
 			if(!client)
 				return
 
-			if(iscarbon(src) && ventcrawler < 2)//It must have atleast been 1 to get this far
+			if(iscarbon(src) && required_nudity) //It must have atleast been 1 to get this far
 				var/failed = 0
 				var/list/items_list = get_equipped_items(include_pockets = TRUE)
 				if(items_list.len)

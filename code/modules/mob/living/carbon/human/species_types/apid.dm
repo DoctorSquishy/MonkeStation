@@ -5,10 +5,12 @@
 	bodyflag = FLAG_APID
 	say_mod = "buzzes"
 	default_color = "FFE800"
-	species_traits = list(LIPS,NOEYESPRITES)
-	inherent_traits = list(TRAIT_BEEFRIEND)
+	species_traits = list(LIPS, NOEYESPRITES)
+	inherent_traits = list(
+		TRAIT_ADVANCEDTOOLUSER,
+		TRAIT_BEEFRIEND
+		)
 	inherent_biotypes = list(MOB_ORGANIC,MOB_HUMANOID,MOB_BUG)
-	mutanttongue = /obj/item/organ/tongue/bee
 	attack_verb = "slash"
 	attack_sound = 'sound/weapons/slash.ogg'
 	miss_sound = 'sound/weapons/slashmiss.ogg'
@@ -16,23 +18,33 @@
 	liked_food = VEGETABLES | FRUIT
 	disliked_food = GROSS | DAIRY
 	toxic_food = MEAT | RAW
-	mutanteyes = /obj/item/organ/eyes/apid
-	mutantlungs = /obj/item/organ/lungs/apid
-	mutantwings = /obj/item/organ/wings/bee
 	burnmod = 1.5
 	toxmod = 1.5
 	staminamod = 1.25
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_MAGIC | MIRROR_PRIDE | ERT_SPAWN | RACE_SWAP | SLIME_EXTRACT
 	species_language_holder = /datum/language_holder/apid
 	inert_mutation = WAXSALIVA
+
+	// Internal Organs
+	mutanttongue = /obj/item/organ/tongue/bee
+	mutanteyes = /obj/item/organ/eyes/apid
+	mutantlungs = /obj/item/organ/lungs/apid
+	// External Organ
+	mutantwings = /obj/item/organ/wings/bee
+
+	// Bodyparts
+	bodypart_overrides = list(
+	BODY_ZONE_HEAD = /obj/item/bodypart/head/apid,
+	BODY_ZONE_CHEST = /obj/item/bodypart/chest/apid,
+	BODY_ZONE_L_ARM = /obj/item/bodypart/l_arm/apid,
+	BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm/apid,
+	BODY_ZONE_L_LEG = /obj/item/bodypart/l_leg/apid,
+	BODY_ZONE_R_LEG = /obj/item/bodypart/r_leg/apid,
+	)
+
+	// Variables Unique to the Species
 	var/cold_cycle = 0
 
-	species_chest = /obj/item/bodypart/chest/apid
-	species_head = /obj/item/bodypart/head/apid
-	species_l_arm = /obj/item/bodypart/l_arm/apid
-	species_r_arm = /obj/item/bodypart/r_arm/apid
-	species_l_leg = /obj/item/bodypart/l_leg/apid
-	species_r_leg = /obj/item/bodypart/r_leg/apid
 
 /datum/species/apid/spec_life(mob/living/carbon/human/H)
 	. = ..()

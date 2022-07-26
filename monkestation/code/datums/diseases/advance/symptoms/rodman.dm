@@ -110,8 +110,8 @@
 					M.grant_language(/datum/language/common, TRUE, TRUE, DISEASE_TRAIT)
 					M.set_playable() //Set the monkey as playable
 					M.mind_initialize()
-					REMOVE_TRAIT(M, TRAIT_MONKEYLIKE, DISEASE_TRAIT)
-					var/mob/living/carbon/monkey/awakened = M
+					REMOVE_TRAIT(M, TRAIT_DISCOORDINATED_TOOL_USER, DISEASE_TRAIT)
+					var/mob/living/carbon/human/species/monkey/awakened = M
 					awakened.ai_controller.UnpossessPawn(TRUE)
 					M.add_memory("You are an awakened monkey, fully sapient and capable of many things. While not a pacifist, you should only fight in self-defense as you are thankful that the crew here have awakened you.")
 					M.visible_message("<span class='warning'>[M] suddenly looks more aware and alert!</span>") //Inform nearby people

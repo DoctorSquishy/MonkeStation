@@ -24,7 +24,7 @@
 		/mob/living/simple_animal/hostile/poison/giant_spider/hunter/viper,\
 		/mob/living/simple_animal/hostile/construct/armored)
 
-/obj/effect/proc_holder/spell/targeted/shapeshift/cast(list/targets,mob/user = usr)
+/obj/effect/proc_holder/spell/targeted/shapeshift/cast(list/targets, mob/user = usr)
 	if(src in user.mob_spell_list)
 		user.mob_spell_list.Remove(src)
 		user.mind.AddSpell(src)

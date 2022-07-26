@@ -135,7 +135,7 @@
 			body += "<br>"
 
 			//Human
-			if(ishuman(M))
+			if(ishuman(M) && !ismonkey(M))
 				body += "<B>Human</B> "
 			else
 				body += "<A href='?_src_=holder;[HrefToken()];humanone=[REF(M)]'>Humanize</A> "
@@ -866,7 +866,7 @@
 			message += jointext(S.laws.get_law_list(include_zeroth = TRUE), "<br>")
 
 		to_chat(usr, message)
-	
+
 	if(!ai_number)
 		to_chat(usr, "<b>No AIs located</b>" )
 

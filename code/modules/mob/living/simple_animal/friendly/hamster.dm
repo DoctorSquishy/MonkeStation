@@ -12,12 +12,9 @@
 	speak_chance = 1
 	turns_per_move = 3
 	do_footstep = TRUE
-
 	density = FALSE
 	pass_flags = PASSMOB
 	mob_size = MOB_SIZE_SMALL
-	ventcrawler = VENTCRAWLER_ALWAYS
-
 	name = "\improper hamster"
 	real_name = "hamster"
 	desc = "It's a hamster."
@@ -32,6 +29,10 @@
 	can_be_held = TRUE
 	worn_slot_flags = ITEM_SLOT_HEAD
 	chat_color = "#D3B277"
+
+/mob/living/simple_animal/pet/hamster/Initialize(mapload)
+	. = ..()
+	ADD_TRAIT(src, TRAIT_VENTCRAWLER_ALWAYS, INNATE_TRAIT)
 
 /mob/living/simple_animal/pet/hamster/vector //now also viro's source of a solitary, shitty starter disease
 	name = "Vector"

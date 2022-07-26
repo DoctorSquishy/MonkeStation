@@ -20,7 +20,7 @@
 			visible_message("<span class='danger'>[M] [response_harm] [src]!</span>",\
 				"<span class='userdanger'>[M] [response_harm] you!</span>", null, COMBAT_MESSAGE_RANGE)
 			playsound(loc, attacked_sound, 25, 1, -1)
-			attack_threshold_check(M.dna.species.punchdamage)
+			attack_threshold_check(M.dna.species.punchdamagehigh)
 			log_combat(M, src, "attacked")
 			updatehealth()
 			return TRUE
@@ -37,7 +37,7 @@
 		adjustBruteLoss(15)
 		return TRUE
 
-/mob/living/simple_animal/attack_paw(mob/living/carbon/monkey/M)
+/mob/living/simple_animal/attack_paw(mob/living/carbon/human/M)
 	if(..()) //successful monkey bite.
 		if(stat != DEAD)
 			var/damage = rand(1, 3)

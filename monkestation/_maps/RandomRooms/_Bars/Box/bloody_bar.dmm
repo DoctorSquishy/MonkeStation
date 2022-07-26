@@ -40,7 +40,7 @@
 /area/crew_quarters/bar)
 "jF" = (
 /obj/effect/decal/cleanable/blood,
-/mob/living/carbon/monkey/punpun,
+/mob/living/carbon/human/species/monkey/punpun,
 /obj/structure/chair/wood{
 	dir = 1
 	},

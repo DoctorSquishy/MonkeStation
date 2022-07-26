@@ -26722,7 +26722,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel,
 /area/medical/genetics)
 "bFI" = (
@@ -27102,7 +27102,7 @@
 /area/medical/genetics)
 "bHa" = (
 /obj/structure/window/reinforced,
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /obj/effect/turf_decal/tile/purple{
 	dir = 8
 	},
@@ -32720,7 +32720,7 @@
 /turf/open/floor/plasteel/white,
 /area/medical/virology)
 "bZT" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/white,
 /area/medical/virology)
 "bZU" = (
@@ -37186,7 +37186,7 @@
 /turf/open/floor/plasteel/white,
 /area/medical/medbay/central)
 "ctA" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
@@ -37331,7 +37331,7 @@
 /turf/open/floor/plasteel/white,
 /area/medical/medbay/central)
 "ctV" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /obj/effect/turf_decal/tile/purple{
 	dir = 4
 	},
@@ -37430,7 +37430,7 @@
 /turf/open/floor/plasteel/white,
 /area/medical/cryo)
 "cum" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /obj/machinery/light{
 	dir = 4
 	},
@@ -46691,7 +46691,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2{
 	dir = 6
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/white,
 /area/medical/virology)
 "kPd" = (
@@ -49154,7 +49154,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2{
 	dir = 9
 	},
-/mob/living/carbon/monkey{
+/mob/living/carbon/human/species/monkey{
 	name = "Ook";
 	unique_name = 0
 	},

@@ -331,9 +331,12 @@
 
 /atom/proc/CtrlClick(mob/user)
 	SEND_SIGNAL(src, COMSIG_CLICK_CTRL, user)
-	var/mob/living/ML = user
-	if(istype(ML))
-		ML.pulled(src)
+	SEND_SIGNAL(user, COMSIG_MOB_CTRL_CLICKED, src)
+	var/mob/living/mob_living = user
+	if(istype(mob_living))
+		mob_living.pulled(src)
+	if(!can_interact(user))
+		return FALSE
 
 /mob/living/carbon/human/CtrlClick(mob/user)
 	if(ishuman(user) && Adjacent(user) && !user.incapacitated())

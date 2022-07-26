@@ -33,8 +33,8 @@
 #define MOB_SIZE_LARGE 3
 
 //Ventcrawling defines
-#define VENTCRAWLER_NONE   0
-#define VENTCRAWLER_NUDE   1
+#define VENTCRAWLER_NONE 0
+#define VENTCRAWLER_NUDE 1
 #define VENTCRAWLER_ALWAYS 2
 
 //Bloodcrawling defines

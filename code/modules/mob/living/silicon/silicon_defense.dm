@@ -79,8 +79,8 @@
 			if(HAS_TRAIT(M, TRAIT_PACIFISM))
 				to_chat(M, "<span class='notice'>You don't want to hurt [src]!</span>")
 				return
-			if(M.dna.species.punchdamage >= 10)
-				adjustBruteLoss(M.dna.species.punchdamage)
+			if(M.dna.species.punchdamagehigh >= 10)
+				adjustBruteLoss(M.dna.species.punchdamagehigh)
 				playsound(loc, "punch", 25, 1, -1)
 				visible_message("<span class='danger'>[M] punches [src]!</span>", \
 					"<span class='userdanger'>[M] punches you!</span>", null, COMBAT_MESSAGE_RANGE)

@@ -116,6 +116,8 @@
 	update_simplemob_varspeed()
 	if(dextrous)
 		AddComponent(/datum/component/personal_crafting)
+		ADD_TRAIT(src, TRAIT_ADVANCEDTOOLUSER, ROUNDSTART_TRAIT)
+		ADD_TRAIT(src, TRAIT_CAN_STRIP, ROUNDSTART_TRAIT)
 	if(discovery_points)
 		AddComponent(/datum/component/discoverable, discovery_points)
 

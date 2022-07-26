@@ -16,13 +16,13 @@
 
 	var/atk_verb = pick("left hook","right hook","straight punch")
 
-	var/damage = 6 + A.dna.species.punchdamage
+	var/damage = rand(5, 8) + A.dna.species.punchdamagelow
 	if(!damage)
 		playsound(D.loc, A.dna.species.miss_sound, 25, 1, -1)
 		D.visible_message("<span class='warning'>[A]'s [atk_verb] misses [D]!</span>", \
 			"<span class='userdanger'>[A]'s [atk_verb] misses you!</span>", null, COMBAT_MESSAGE_RANGE)
 		log_combat(A, D, "attempted to hit", atk_verb)
-		return 0
+		return FALSE
 
 
 	var/obj/item/bodypart/affecting = D.get_bodypart(ran_zone(A.zone_selected))

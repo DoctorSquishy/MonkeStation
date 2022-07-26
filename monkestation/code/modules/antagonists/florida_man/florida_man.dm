@@ -12,7 +12,7 @@
 		var/mob/living/carbon/human/floridan = owner.current
 
 		//Abilities & Traits added here
-		ADD_TRAIT(floridan, TRAIT_MONKEYLIKE, SPECIES_TRAIT)
+		ADD_TRAIT(floridan, TRAIT_DISCOORDINATED_TOOL_USER, SPECIES_TRAIT)
 		ADD_TRAIT(floridan, TRAIT_CLUMSY, SPECIES_TRAIT)
 		ADD_TRAIT(floridan, TRAIT_DUMB, SPECIES_TRAIT)
 		ADD_TRAIT(floridan, TRAIT_STABLELIVER, SPECIES_TRAIT)
@@ -20,10 +20,10 @@
 		ADD_TRAIT(floridan, TRAIT_TOXIMMUNE, SPECIES_TRAIT)
 		ADD_TRAIT(floridan, TRAIT_JAILBIRD, SPECIES_TRAIT)
 		ADD_TRAIT(floridan, TRAIT_IGNORESLOWDOWN, SPECIES_TRAIT)
+		ADD_TRAIT(floridan, TRAIT_VENTCRAWLER_NUDE, INNATE_TRAIT)
 
 		floridan.physiology.stamina_mod = 0.25
 		floridan.physiology.stun_mod = 0.25
-		floridan.ventcrawler = 1
 		var/obj/effect/proc_holder/spell/targeted/florida_doorbuster/DB = new
 		var/obj/effect/proc_holder/spell/targeted/florida_cuff_break/CB = new
 		var/obj/effect/proc_holder/spell/targeted/florida_regeneration/RG = new

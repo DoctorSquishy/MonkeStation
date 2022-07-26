@@ -508,7 +508,7 @@ GLOBAL_DATUM(blackbox, /obj/machinery/smartfridge/black_box)
 			NewTerrainChairs = /obj/structure/chair/wood
 			NewTerrainTables = /obj/structure/table/wood
 			NewFlora = list(/obj/structure/flora/ausbushes/sparsegrass, /obj/structure/flora/ausbushes/fernybush, /obj/structure/flora/ausbushes/leafybush,
-							/obj/structure/flora/ausbushes/grassybush, /obj/structure/flora/ausbushes/sunnybush, /obj/structure/flora/tree/palm, /mob/living/carbon/monkey)
+							/obj/structure/flora/ausbushes/grassybush, /obj/structure/flora/ausbushes/sunnybush, /obj/structure/flora/tree/palm, /mob/living/carbon/human/species/monkey)
 			florachance = 20
 		if("ayy lmao") //Beneficial, turns stuff into alien alloy which is useful to cargo and research. Also repairs atmos.
 			NewTerrainFloors = /turf/open/floor/plating/abductor
@@ -646,7 +646,6 @@ GLOBAL_DATUM(blackbox, /obj/machinery/smartfridge/black_box)
 	density = FALSE
 	movement_type = FLYING
 	pass_flags = PASSTABLE | PASSGRILLE | PASSMOB
-	ventcrawler = VENTCRAWLER_ALWAYS
 	mob_size = MOB_SIZE_TINY
 	gold_core_spawnable = HOSTILE_SPAWN
 	verb_say = "warps"
@@ -674,6 +673,7 @@ GLOBAL_DATUM(blackbox, /obj/machinery/smartfridge/black_box)
 	remove_verb(/mob/verb/me_verb)
 	var/datum/atom_hud/medsensor = GLOB.huds[DATA_HUD_MEDICAL_ADVANCED]
 	medsensor.add_hud_to(src)
+	ADD_TRAIT(src, TRAIT_VENTCRAWLER_ALWAYS, INNATE_TRAIT)
 
 /mob/living/simple_animal/hostile/lightgeist/AttackingTarget()
 	. = ..()

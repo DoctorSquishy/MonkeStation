@@ -23,7 +23,7 @@
 				visible_message("<span class='danger'>[M] punches [src]!</span>", \
 						"<span class='userdanger'>[M] punches you!</span>", null, COMBAT_MESSAGE_RANGE)
 				var/obj/item/bodypart/affecting = get_bodypart(ran_zone(M.zone_selected))
-				apply_damage(M.dna.species.punchdamage, BRUTE, affecting)
+				apply_damage(M.dna.species.punchdamagehigh, BRUTE, affecting)
 				log_combat(M, src, "attacked")
 
 			if ("disarm")

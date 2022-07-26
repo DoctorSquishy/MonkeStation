@@ -90,12 +90,12 @@
 		return M.attack_alien(M)
 	return ..()
 
-/mob/living/carbon/human/attack_paw(mob/living/carbon/monkey/M)
+/mob/living/carbon/human/attack_paw(mob/living/carbon/human/M)
 	if(HAS_TRAIT(src, TRAIT_ONEWAYROAD))
 		return M.attack_paw(M)
 	return ..()
 
-/mob/living/simple_animal/hostile/guardian/attack_paw(mob/living/carbon/monkey/M)
+/mob/living/simple_animal/hostile/guardian/attack_paw(mob/living/carbon/human/M)
 	if(HAS_TRAIT(src, TRAIT_ONEWAYROAD))
 		return M.attack_paw(M)
 	return ..()

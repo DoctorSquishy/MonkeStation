@@ -8,21 +8,39 @@
 	sexes = 0
 	meat = /obj/item/food/meat/slab/human/mutant/zombie
 	species_traits = list(NOBLOOD,NOZOMBIE,NOTRANSSTING)
-	inherent_traits = list(TRAIT_TOXIMMUNE,TRAIT_RESISTCOLD,TRAIT_RESISTHIGHPRESSURE,TRAIT_RESISTLOWPRESSURE,TRAIT_RADIMMUNE,TRAIT_EASYDISMEMBER,\
-	TRAIT_LIMBATTACHMENT,TRAIT_NOBREATH,TRAIT_NODEATH,TRAIT_FAKEDEATH,TRAIT_NOCLONELOSS)
+	inherent_traits = list(
+		TRAIT_ADVANCEDTOOLUSER,
+		TRAIT_TOXIMMUNE,
+		TRAIT_RESISTCOLD,
+		TRAIT_RESISTHIGHPRESSURE,
+		TRAIT_RESISTLOWPRESSURE,
+		TRAIT_RADIMMUNE,
+		TRAIT_EASYDISMEMBER,
+		TRAIT_LIMBATTACHMENT,
+		TRAIT_NOBREATH,
+		TRAIT_NODEATH,
+		TRAIT_FAKEDEATH,
+		TRAIT_NOCLONELOSS,
+		)
 	inherent_biotypes = list(MOB_UNDEAD, MOB_HUMANOID)
-	mutanttongue = /obj/item/organ/tongue/zombie
 	var/static/list/spooks = list('sound/hallucinations/growl1.ogg','sound/hallucinations/growl2.ogg','sound/hallucinations/growl3.ogg','sound/hallucinations/veryfar_noise.ogg','sound/hallucinations/wail.ogg')
 	disliked_food = NONE
 	liked_food = GROSS | MEAT | RAW
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_PRIDE | MIRROR_MAGIC | ERT_SPAWN
 
-	species_chest = /obj/item/bodypart/chest/zombie
-	species_head = /obj/item/bodypart/head/zombie
-	species_l_arm = /obj/item/bodypart/l_arm/zombie
-	species_r_arm = /obj/item/bodypart/r_arm/zombie
-	species_l_leg = /obj/item/bodypart/l_leg/zombie
-	species_r_leg = /obj/item/bodypart/r_leg/zombie
+	// Internal Organs
+	mutanttongue = /obj/item/organ/tongue/zombie
+
+	// Bodyparts
+	bodypart_overrides = list(
+		BODY_ZONE_HEAD = /obj/item/bodypart/head/zombie,
+		BODY_ZONE_CHEST = /obj/item/bodypart/chest/zombie,
+		BODY_ZONE_L_ARM = /obj/item/bodypart/l_arm/zombie,
+		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm/zombie,
+		BODY_ZONE_L_LEG = /obj/item/bodypart/l_leg/zombie,
+		BODY_ZONE_R_LEG = /obj/item/bodypart/r_leg/zombie,
+		)
+
 
 /datum/species/zombie/check_roundstart_eligible()
 	if(SSevents.holidays && SSevents.holidays[HALLOWEEN])

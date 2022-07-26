@@ -6,8 +6,6 @@
 	attack_sound = 'sound/weapons/etherealhit.ogg'
 	miss_sound = 'sound/weapons/etherealmiss.ogg'
 	meat = /obj/item/food/meat/slab/human/mutant/ethereal
-	mutantstomach = /obj/item/organ/stomach/battery/ethereal
-	mutanttongue = /obj/item/organ/tongue/ethereal
 	exotic_blood = /datum/reagent/consumable/liquidelectricity //Liquid Electricity. fuck you think of something better gamer
 	siemens_coeff = 0.5 //They thrive on energy
 	brutemod = 1.25 //They're weak to punches
@@ -16,20 +14,32 @@
 	species_traits = list(DYNCOLORS, AGENDER, HAIR)
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_PRIDE | MIRROR_MAGIC | RACE_SWAP | ERT_SPAWN | SLIME_EXTRACT
 	species_language_holder = /datum/language_holder/ethereal
-	inherent_traits = list(TRAIT_POWERHUNGRY)
+	inherent_traits = list(
+		TRAIT_ADVANCEDTOOLUSER,
+		TRAIT_POWERHUNGRY,
+		)
 	sexes = FALSE //no fetish content allowed
 	toxic_food = NONE
 	hair_color = "fixedmutcolor"
 	hair_alpha = 140
 	swimming_component = /datum/component/swimming/ethereal
+	inert_mutation = OVERLOAD
 
-	species_chest = /obj/item/bodypart/chest/ethereal
-	species_head = /obj/item/bodypart/head/ethereal
-	species_l_arm = /obj/item/bodypart/l_arm/ethereal
-	species_r_arm = /obj/item/bodypart/r_arm/ethereal
-	species_l_leg = /obj/item/bodypart/l_leg/ethereal
-	species_r_leg = /obj/item/bodypart/r_leg/ethereal
+	// Internal Organs
+	mutantstomach = /obj/item/organ/stomach/battery/ethereal
+	mutanttongue = /obj/item/organ/tongue/ethereal
 
+	// Bodyparts
+	bodypart_overrides = list(
+		BODY_ZONE_HEAD = /obj/item/bodypart/head/ethereal,
+		BODY_ZONE_CHEST = /obj/item/bodypart/chest/ethereal,
+		BODY_ZONE_L_ARM = /obj/item/bodypart/l_arm/ethereal,
+		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm/ethereal,
+		BODY_ZONE_L_LEG = /obj/item/bodypart/l_leg/ethereal,
+		BODY_ZONE_R_LEG = /obj/item/bodypart/r_leg/ethereal,
+	)
+
+	// Variables Unique to the Species
 	var/static/unhealthy_color = rgb(237, 164, 149)
 	var/current_color
 	var/emp_effect = FALSE
@@ -42,7 +52,6 @@
 	var/static/b2 = 149
 	//this is shit but how do i fix it? no clue.
 	var/drain_time = 0 //used to keep ethereals from spam draining power sources
-	inert_mutation = OVERLOAD
 	var/obj/effect/dummy/lighting_obj/ethereal_light
 
 

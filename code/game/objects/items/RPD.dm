@@ -363,7 +363,7 @@ GLOBAL_LIST_INIT(fluid_duct_recipes, list(
 		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, FALSE)
 
 /obj/item/pipe_dispenser/pre_attack(atom/A, mob/user)
-	if(!user.IsAdvancedToolUser() || istype(A, /turf/open/space/transit))
+	if(!ISADVANCEDTOOLUSER(user) || istype(A, /turf/open/space/transit))
 		return ..()
 
 	//So that changing the menu settings doesn't affect the pipes already being built.

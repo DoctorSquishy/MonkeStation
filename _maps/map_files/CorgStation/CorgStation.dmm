@@ -11282,7 +11282,7 @@
 	pixel_x = -25;
 	pixel_y = 28
 	},
-/mob/living/carbon/monkey/punpun,
+/mob/living/carbon/human/species/monkey/punpun,
 /obj/machinery/power/apc/auto_name/west{
 	pixel_x = -24
 	},
@@ -15197,7 +15197,7 @@
 /area/engine/atmos)
 "dDG" = (
 /obj/structure/bed/roller,
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/freezer,
 /area/medical/genetics)
 "dDM" = (
@@ -30515,7 +30515,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/mob/living/carbon/monkey{
+/mob/living/carbon/human/species/monkey{
 	name = "Ook";
 	unique_name = 0
 	},
@@ -46087,7 +46087,7 @@
 	pixel_y = 1
 	},
 /obj/structure/bed/roller,
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/freezer,
 /area/medical/genetics)
 "kMS" = (
@@ -69043,7 +69043,7 @@
 	dir = 1;
 	pixel_y = 1
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/freezer,
 /area/medical/genetics)
 "qmV" = (
@@ -96123,7 +96123,7 @@
 /area/science/storage)
 "wJt" = (
 /obj/machinery/light/small,
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/freezer,
 /area/medical/genetics)
 "wJI" = (

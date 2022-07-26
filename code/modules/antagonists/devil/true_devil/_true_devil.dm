@@ -11,7 +11,6 @@
 	gender = NEUTER
 	health = 350
 	maxHealth = 350
-	ventcrawler = VENTCRAWLER_NONE
 	density = TRUE
 	pass_flags =  0
 	sight = (SEE_TURFS | SEE_OBJS)
@@ -20,7 +19,7 @@
 	mob_size = MOB_SIZE_LARGE
 	held_items = list(null, null)
 	bodyparts = list(/obj/item/bodypart/chest/devil, /obj/item/bodypart/head/devil, /obj/item/bodypart/l_arm/devil,
-					 /obj/item/bodypart/r_arm/devil, /obj/item/bodypart/r_leg/devil, /obj/item/bodypart/l_leg/devil)
+					/obj/item/bodypart/r_arm/devil, /obj/item/bodypart/r_leg/devil, /obj/item/bodypart/l_leg/devil)
 	hud_type = /datum/hud/devil
 	var/ascended = FALSE
 	var/mob/living/oldform

@@ -169,18 +169,28 @@
 /datum/mutation/human/race
 	name = "Monkified"
 	desc = "A strange genome, believing to be what differentiates monkeys from humans."
+	text_gain_indication = "You feel unusually monkey-like."
+	text_lose_indication = "You feel like your old self."
 	quality = NEGATIVE
 	time_coeff = 2
 	locked = TRUE //Species specific, keep out of actual gene pool
 
+	var/datum/species/original_species = /datum/species/human
+	var/original_name
+
 /datum/mutation/human/race/on_acquiring(mob/living/carbon/human/owner)
 	if(..())
 		return
-	. = owner.monkeyize(TR_KEEPITEMS | TR_KEEPIMPLANTS | TR_KEEPORGANS | TR_KEEPDAMAGE | TR_KEEPVIRUS | TR_KEEPSE | TR_KEEPAI)
+	if(!ismonkey(owner))
+		original_species = owner.dna.species.type
+		original_name = owner.real_name
+		owner.fully_replace_character_name(null, "monkey ([rand(1,999)])")
+	. = owner.monkeyize()
 
-/datum/mutation/human/race/on_losing(mob/living/carbon/monkey/owner)
-	if(owner && istype(owner) && owner.stat != DEAD && (owner.dna.mutations.Remove(src)))
-		. = owner.humanize(TR_KEEPITEMS | TR_KEEPIMPLANTS | TR_KEEPORGANS | TR_KEEPDAMAGE | TR_KEEPVIRUS | TR_KEEPSE | TR_KEEPAI)
+/datum/mutation/human/race/on_losing(mob/living/carbon/human/owner)
+	if(owner && owner.stat != DEAD && (owner.dna.mutations.Remove(src)) && ismonkey(owner))
+		owner.fully_replace_character_name(null, original_name)
+		. = owner.humanize()
 
 /datum/mutation/human/glow
 	name = "Glowy"
@@ -433,16 +443,16 @@
 /datum/mutation/human/catclaws/on_acquiring()
 	if(..())
 		return
-	added_damage = min(17, 6 * GET_MUTATION_POWER(src) + owner.dna.species.punchdamage)
-	added_damage -= owner.dna.species.punchdamage
-	owner.dna.species.punchdamage += added_damage
+	added_damage = min(17, 6 * GET_MUTATION_POWER(src) + owner.dna.species.punchdamagehigh)
+	added_damage -= owner.dna.species.punchdamagehigh
+	owner.dna.species.punchdamagehigh += added_damage
 	to_chat(owner, "<span class='notice'>Claws extend from your fingertips.</span>")
 	owner.dna.species.attack_verb = "slash"
 
 /datum/mutation/human/catclaws/on_losing()
 	if(..())
 		return
-	owner.dna.species.punchdamage -= added_damage
+	owner.dna.species.punchdamagehigh -= added_damage
 	to_chat(owner, "<span class='warning'> Your claws retract into your hand.</span>")
 	owner.dna.species.attack_verb = initial(owner.dna.species.attack_verb)
 

@@ -15830,7 +15830,7 @@
 /turf/open/floor/plasteel/dark,
 /area/engine/gravity_generator)
 "ggi" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /obj/effect/turf_decal/tile/green{
 	dir = 8
 	},
@@ -16420,7 +16420,7 @@
 /obj/effect/turf_decal/monke/siding/green,
 /obj/structure/window/reinforced,
 /obj/effect/landmark/blobstart,
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /obj/effect/turf_decal/tile/green{
 	dir = 4
 	},

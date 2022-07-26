@@ -99,6 +99,8 @@
 
 	Don't crash the server, OK?
 
+	"UPDATE /mob/living/carbon/human/species/monkey SET #null = forceMove(usr.loc)"
+
 	A quick recommendation: before you run something like a DELETE or another query.. Run it through SELECT
 	first.
 	You'd rather not gib every player on accident.

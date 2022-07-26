@@ -5,14 +5,18 @@
 	default_color = "00FF90"
 	say_mod = "blorbles"
 	species_traits = list(MUTCOLORS,EYECOLOR,HAIR,FACEHAIR)
-	inherent_traits = list(TRAIT_TOXINLOVER,TRAIT_NOFIRE,TRAIT_ALWAYS_CLEAN,TRAIT_EASYDISMEMBER)
+	inherent_traits = list(
+		TRAIT_ADVANCEDTOOLUSER,
+		TRAIT_TOXINLOVER,
+		TRAIT_NOFIRE,
+		TRAIT_ALWAYS_CLEAN,
+		TRAIT_EASYDISMEMBER,
+		)
 	hair_color = "mutcolor"
 	hair_alpha = 150
-	mutantlungs = /obj/item/organ/lungs/oozeling
 	meat = /obj/item/food/meat/slab/human/mutant/slime
 	exotic_blood = /datum/reagent/toxin/slimeooze
 	damage_overlay_type = ""
-	var/datum/action/innate/regenerate_limbs/regenerate_limbs
 	coldmod = 6   // = 3x cold damage
 	heatmod = 0.5 // = 1/4x heat damage
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_PRIDE | MIRROR_MAGIC | RACE_SWAP | ERT_SPAWN | SLIME_EXTRACT
@@ -22,12 +26,21 @@
 	disliked_food = NONE
 	inert_mutation = ACIDOOZE
 
-	species_chest = /obj/item/bodypart/chest/oozeling
-	species_head = /obj/item/bodypart/head/oozeling
-	species_l_arm = /obj/item/bodypart/l_arm/oozeling
-	species_r_arm = /obj/item/bodypart/r_arm/oozeling
-	species_l_leg = /obj/item/bodypart/l_leg/oozeling
-	species_r_leg = /obj/item/bodypart/r_leg/oozeling
+	// Internal Organs
+	mutantlungs = /obj/item/organ/lungs/oozeling
+
+	// Bodyparts
+	bodypart_overrides = list(
+		BODY_ZONE_HEAD = /obj/item/bodypart/head/oozeling,
+		BODY_ZONE_CHEST = /obj/item/bodypart/chest/oozeling,
+		BODY_ZONE_L_ARM = /obj/item/bodypart/l_arm/oozeling,
+		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm/oozeling,
+		BODY_ZONE_L_LEG = /obj/item/bodypart/l_leg/oozeling,
+		BODY_ZONE_R_LEG = /obj/item/bodypart/r_leg/oozeling,
+		)
+
+	// Variables Unique to the Species
+	var/datum/action/innate/regenerate_limbs/regenerate_limbs
 
 /datum/species/oozeling/random_name(gender, unique, lastname, attempts)
 	. = "[pick(GLOB.oozeling_first_names)]"

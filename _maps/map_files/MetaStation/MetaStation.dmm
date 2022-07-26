@@ -37721,7 +37721,7 @@
 	dir = 1;
 	pixel_y = 1
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/freezer,
 /area/medical/genetics)
 "cAc" = (
@@ -37745,7 +37745,7 @@
 	req_access_txt = "9"
 	},
 /obj/structure/bed/roller,
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/freezer,
 /area/medical/genetics)
 "cAe" = (
@@ -37757,7 +37757,7 @@
 	dir = 4
 	},
 /obj/structure/bed/roller,
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/freezer,
 /area/medical/genetics)
 "cAf" = (
@@ -38502,7 +38502,7 @@
 /turf/open/floor/plating/airless,
 /area/science/test_area)
 "cCK" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/freezer,
 /area/medical/virology)
 "cCM" = (
@@ -46347,7 +46347,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/freezer,
 /area/medical/virology)
 "dBT" = (
@@ -50138,7 +50138,7 @@
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4{
 	dir = 1
 	},
-/mob/living/carbon/monkey{
+/mob/living/carbon/human/species/monkey{
 	name = "Ook";
 	unique_name = 0
 	},
@@ -57465,7 +57465,7 @@
 /turf/open/floor/plating,
 /area/maintenance/port/fore)
 "kbm" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4{
 	dir = 8
 	},

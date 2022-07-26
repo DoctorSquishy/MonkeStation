@@ -6,31 +6,46 @@
 	sexes = 0
 	meat = /obj/item/stack/sheet/mineral/plasma
 	species_traits = list(NOBLOOD,NOTRANSSTING)
-	inherent_traits = list(TRAIT_RESISTCOLD,TRAIT_RADIMMUNE,TRAIT_NOHUNGER,TRAIT_ALWAYS_CLEAN)
-	inherent_biotypes = list(MOB_INORGANIC, MOB_HUMANOID)
-	mutantlungs = /obj/item/organ/lungs/plasmaman
-	mutanttongue = /obj/item/organ/tongue/bone/plasmaman
-	mutantliver = /obj/item/organ/liver/plasmaman
-	mutant_butt = /obj/item/organ/butt/plasma //MonkeStation Edit
-	mutantstomach = /obj/item/organ/stomach/plasmaman
+	inherent_traits = list(
+		TRAIT_ADVANCEDTOOLUSER,
+		TRAIT_RESISTCOLD,
+		TRAIT_RADIMMUNE,
+		TRAIT_NOHUNGER,
+		TRAIT_ALWAYS_CLEAN,
+		)
+	inherent_biotypes = list(MOB_INORGANIC,MOB_HUMANOID)
+
 	burnmod = 1.5
 	heatmod = 1.5
 	brutemod = 1.5
 	breathid = "tox"
 	damage_overlay_type = ""//let's not show bloody wounds or burns over bones.
-	var/internal_fire = FALSE //If the bones themselves are burning clothes won't help you much
 	disliked_food = FRUIT
 	liked_food = VEGETABLES
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_PRIDE | MIRROR_MAGIC
 	outfit_important_for_life = /datum/outfit/plasmaman
 	species_language_holder = /datum/language_holder/skeleton
 
-	species_chest = /obj/item/bodypart/chest/plasmaman
-	species_head = /obj/item/bodypart/head/plasmaman
-	species_l_arm = /obj/item/bodypart/l_arm/plasmaman
-	species_r_arm = /obj/item/bodypart/r_arm/plasmaman
-	species_l_leg = /obj/item/bodypart/l_leg/plasmaman
-	species_r_leg = /obj/item/bodypart/r_leg/plasmaman
+	// Internal Organs
+	mutantlungs = /obj/item/organ/lungs/plasmaman
+	mutanttongue = /obj/item/organ/tongue/bone/plasmaman
+	mutantliver = /obj/item/organ/liver/plasmaman
+	mutantstomach = /obj/item/organ/stomach/plasmaman
+	mutant_butt = /obj/item/organ/butt/plasma //MonkeStation Edit
+
+	// Bodyparts
+	bodypart_overrides = list(
+		BODY_ZONE_HEAD = /obj/item/bodypart/head/plasmaman,
+		BODY_ZONE_CHEST = /obj/item/bodypart/chest/plasmaman,
+		BODY_ZONE_L_ARM = /obj/item/bodypart/l_arm/plasmaman,
+		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm/plasmaman,
+		BODY_ZONE_L_LEG = /obj/item/bodypart/l_leg/plasmaman,
+		BODY_ZONE_R_LEG = /obj/item/bodypart/r_leg/plasmaman,
+		)
+
+	// Variables Unique to the Species
+	/// If the bones themselves are burning clothes won't help you much
+	var/internal_fire = FALSE
 
 /datum/species/plasmaman/spec_life(mob/living/carbon/human/H)
 	var/atmos_sealed = FALSE

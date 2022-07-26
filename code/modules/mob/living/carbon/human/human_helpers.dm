@@ -114,7 +114,7 @@
 			return id_card
 
 /mob/living/carbon/human/IsAdvancedToolUser()
-	if(HAS_TRAIT(src, TRAIT_MONKEYLIKE))
+	if(HAS_TRAIT(src, TRAIT_DISCOORDINATED_TOOL_USER))
 		return FALSE
 	return TRUE//Humans can use guns and such
 

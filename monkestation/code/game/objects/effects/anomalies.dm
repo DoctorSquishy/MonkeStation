@@ -335,9 +335,9 @@
 		return
 
 	if(prob(10))
-		new /mob/living/carbon/monkey/angry(src.loc)
+		new /mob/living/carbon/human/species/monkey/angry(src.loc)
 	else
-		new /mob/living/carbon/monkey(src.loc)
+		new /mob/living/carbon/human/species/monkey(src.loc)
 	active = FALSE
 
 /obj/effect/anomaly/monkey/detonate()

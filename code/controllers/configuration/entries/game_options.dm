@@ -309,8 +309,6 @@
 	movedelay_type = /mob/living/carbon/human
 /datum/config_entry/number/outdated_movedelay/robot_delay
 	movedelay_type = /mob/living/silicon/robot
-/datum/config_entry/number/outdated_movedelay/monkey_delay
-	movedelay_type = /mob/living/carbon/monkey
 /datum/config_entry/number/outdated_movedelay/alien_delay
 	movedelay_type = /mob/living/carbon/alien
 /datum/config_entry/number/outdated_movedelay/slime_delay
@@ -457,6 +455,10 @@
 /datum/config_entry/flag/spare_enforce_coc
 
 /datum/config_entry/flag/station_traits
+
+/datum/config_entry/number/monkeycap
+	default = 64
+	min_val = 0
 
 /datum/config_entry/number/ratcap
 	config_entry_value = 64

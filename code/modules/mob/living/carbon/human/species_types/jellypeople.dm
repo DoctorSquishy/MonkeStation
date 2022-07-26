@@ -5,12 +5,15 @@
 	default_color = "00FF90"
 	say_mod = "blorbles"
 	species_traits = list(MUTCOLORS,EYECOLOR,NOBLOOD)
-	inherent_traits = list(TRAIT_TOXINLOVER, TRAIT_NONECRODISEASE)
-	mutantlungs = /obj/item/organ/lungs/slime
+	inherent_traits = list(
+		TRAIT_ADVANCEDTOOLUSER,
+		TRAIT_TOXINLOVER,
+		TRAIT_NONECRODISEASE
+		)
+
 	meat = /obj/item/food/meat/slab/human/mutant/slime
 	exotic_blood = /datum/reagent/toxin/slimejelly
 	damage_overlay_type = ""
-	var/datum/action/innate/regenerate_limbs/regenerate_limbs
 	liked_food = MEAT
 	coldmod = 6   // = 3x cold damage
 	heatmod = 0.5 // = 1/4x heat damage
@@ -20,13 +23,21 @@
 	species_language_holder = /datum/language_holder/jelly
 	swimming_component = /datum/component/swimming/dissolve
 
+	// Internal Organs
+	mutantlungs = /obj/item/organ/lungs/slime
 
-	species_chest = /obj/item/bodypart/chest/jelly
-	species_head = /obj/item/bodypart/head/jelly
-	species_l_arm = /obj/item/bodypart/l_arm/jelly
-	species_r_arm = /obj/item/bodypart/r_arm/jelly
-	species_l_leg = /obj/item/bodypart/l_leg/jelly
-	species_r_leg = /obj/item/bodypart/r_leg/jelly
+	// Bodyparts
+	bodypart_overrides = list(
+		BODY_ZONE_HEAD = /obj/item/bodypart/head/jelly,
+		BODY_ZONE_CHEST = /obj/item/bodypart/chest/jelly,
+		BODY_ZONE_L_ARM = /obj/item/bodypart/l_arm/jelly,
+		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm/jelly,
+		BODY_ZONE_L_LEG = /obj/item/bodypart/l_leg/jelly,
+		BODY_ZONE_R_LEG = /obj/item/bodypart/r_leg/jelly,
+		)
+
+	// Variables Unique to the Species
+	var/datum/action/innate/regenerate_limbs/regenerate_limbs
 
 /datum/species/jelly/on_species_loss(mob/living/carbon/C)
 	if(regenerate_limbs)

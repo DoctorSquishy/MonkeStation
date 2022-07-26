@@ -26,9 +26,9 @@
 	objectives -= O
 
 /datum/antagonist/teratoma/admin_remove(mob/admin)
-	var/mob/living/carbon/monkey/tumor/M = owner.current
+	var/mob/living/carbon/human/species/monkey/tumor/M = owner.current
 	if(alert(admin, "Humanize?", "Humanize", "Yes", "No") == "Yes")
-		M.humanize(TR_KEEPITEMS  |  TR_KEEPIMPLANTS  |  TR_KEEPORGANS  |  TR_KEEPDAMAGE  |  TR_KEEPVIRUS  |  TR_DEFAULTMSG)
+		M.humanize()
 	. = ..()
 
 /datum/antagonist/teratoma/admin_add(datum/mind/new_owner, mob/admin)
@@ -39,8 +39,8 @@
 	log_admin("[key_name(admin)] made [key_name(new_owner)] a living teratoma!")
 	message_admins("[key_name_admin(admin)] made [key_name_admin(new_owner)] a living teratoma!")
 
-//Mainttoma
 
+//Mainttoma
 /datum/antagonist/teratoma/hugbox
 	name = "Maintenance Teratoma"
 	roundend_category = "other"

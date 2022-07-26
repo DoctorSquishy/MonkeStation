@@ -90,17 +90,6 @@
 #define DNA_MUTATION_BLOCKS			8
 #define DNA_UNIQUE_ENZYMES_LEN		32
 
-//Transformation proc stuff
-#define TR_KEEPITEMS	(1<<0)
-#define TR_KEEPVIRUS	(1<<1)
-#define TR_KEEPDAMAGE	(1<<2)
-#define TR_HASHNAME		(1<<3)	// hashing names (e.g. monkey(e34f)) (only in monkeyize)
-#define TR_KEEPIMPLANTS	(1<<4)
-#define TR_KEEPSE		(1<<5)	// changelings shouldn't edit the DNA's SE when turning into a monkey
-#define TR_DEFAULTMSG	(1<<6)
-#define TR_KEEPORGANS	(1<<8)
-#define TR_KEEPAI 		(1<<9)
-
 #define CLONER_FRESH_CLONE "fresh"
 #define CLONER_MATURE_CLONE "mature"
 
@@ -131,6 +120,11 @@
 #define NOMOUTH			24
 #define NOSOCKS       25 // You cannot wear socks.
 #define CUSTOM			26 //monkestation edit - for custom colors on sprite accessories (currently only used for anime trait)
+
+/// Do not draw blood overlay
+#define NOBLOODOVERLAY 27
+///No augments, for monkeys in specific because they will turn into fucking freakazoids https://cdn.discordapp.com/attachments/326831214667235328/791313258912153640/102707682-fa7cad80-4294-11eb-8f13-8c689468aeb0.png
+#define NOAUGMENTS 28
 
 //organ slots
 #define ORGAN_SLOT_BRAIN "brain"

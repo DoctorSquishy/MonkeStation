@@ -13282,7 +13282,7 @@
 /turf/open/floor/plasteel/dark,
 /area/science/server)
 "aER" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/white/corner{
 	dir = 8
 	},
@@ -15822,7 +15822,7 @@
 	name = "Genetics Pen";
 	req_access_txt = "9"
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel,
 /area/medical/genetics)
 "aKq" = (
@@ -22021,7 +22021,7 @@
 	name = "Genetics Pen";
 	req_access_txt = "9"
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel,
 /area/medical/genetics)
 "aYd" = (
@@ -22052,11 +22052,11 @@
 	},
 /area/medical/genetics)
 "aYg" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel,
 /area/medical/genetics)
 "aYh" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/white/corner,
 /area/medical/genetics)
 "aYi" = (
@@ -26677,7 +26677,7 @@
 /turf/open/floor/plating,
 /area/maintenance/aft)
 "bhD" = (
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/white,
 /area/medical/virology)
 "bhE" = (
@@ -26692,7 +26692,7 @@
 	dir = 4;
 	network = list("ss13","Medical","Virology")
 	},
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/white,
 /area/medical/virology)
 "bhH" = (
@@ -42461,7 +42461,7 @@
 /area/bridge)
 "bLU" = (
 /obj/effect/landmark/event_spawn,
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel,
 /area/medical/genetics)
 "bLV" = (
@@ -42533,7 +42533,7 @@
 /area/security/brig)
 "bMb" = (
 /obj/effect/landmark/xeno_spawn,
-/mob/living/carbon/monkey,
+/mob/living/carbon/human/species/monkey,
 /turf/open/floor/plasteel/white,
 /area/medical/virology)
 "bMc" = (

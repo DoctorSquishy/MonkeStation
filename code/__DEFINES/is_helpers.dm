@@ -83,11 +83,12 @@ GLOBAL_LIST_INIT(turfs_without_ground, typecacheof(list(
 #define isvampire(A) (is_species(A,/datum/species/vampire))
 #define isipc(A) (is_species(A, /datum/species/ipc))
 #define isapid(A) (is_species(A, /datum/species/apid))
-#define issimian(A) (is_species(A, /datum/species/simian))//monkestation edit : add simian species
+#define issimian(A) (is_species(A, /datum/species/simian)) //monkestation edit : add simian species
+#define ismonkey(A) (is_species(A, /datum/species/monkey))
+#define isteratoma(A) (is_species(A, /datum/species/teratoma))
+
 
 //more carbon mobs
-#define ismonkey(A) (istype(A, /mob/living/carbon/monkey))
-
 #define isxeno(A) (istype(A, /mob/living/carbon/xenomorph))
 
 #define isalien(A) (istype(A, /mob/living/carbon/alien))
@@ -184,7 +185,6 @@ GLOBAL_LIST_INIT(clawfootmob, typecacheof(list(
 	)))
 
 GLOBAL_LIST_INIT(barefootmob, typecacheof(list(
-	/mob/living/carbon/monkey,
 	/mob/living/simple_animal/pet/penguin,
 	/mob/living/simple_animal/hostile/gorilla,
 	/mob/living/simple_animal/hostile/jungle/mook

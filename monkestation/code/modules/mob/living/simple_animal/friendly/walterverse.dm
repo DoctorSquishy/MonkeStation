@@ -72,9 +72,12 @@
 	icon_dead = "sus_dead"
 	gold_core_spawnable = FRIENDLY_SPAWN
 	unique_pet = TRUE
-	ventcrawler = VENTCRAWLER_ALWAYS
 	deathmessage = "gets ejected"
 	speak = list("barks!", "woofs!", "sus!", "Walter", "firetrucks", "monstertrucks", "tasks")
+
+/mob/living/simple_animal/pet/dog/bullterrier/walter/sus/Initialize(mapload)
+	. = ..()
+	ADD_TRAIT(src, TRAIT_VENTCRAWLER_ALWAYS, INNATE_TRAIT)
 
 /mob/living/simple_animal/pet/dog/bullterrier/walter/clown
 	name = "Clown Walter"
