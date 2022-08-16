@@ -417,12 +417,12 @@ GENE SCANNER
 					to_chat(user, "<span class='notice'>[round(R.volume, 0.001)] units of [R.name][R.overdosed == 1 ? "</span> - <span class='boldannounce'>OVERDOSING</span>" : ".</span>"]")
 			else
 				to_chat(user, "<span class='notice'>Subject contains no reagents.</span>")
-			if(M.reagents.addiction_list.len)
-				to_chat(user, "<span class='boldannounce'>Subject is addicted to the following reagents:</span>")
-				for(var/datum/reagent/R in M.reagents.addiction_list)
-					to_chat(user, "<span class='alert'>[R.name]</span>")
-			else
-				to_chat(user, "<span class='notice'>Subject is not addicted to any reagents.</span>")
+		if(LAZYLEN(M.mind.active_addictions))
+			to_chat(user,"<span class='boldannounce ml-1'>Subject is addicted to the following types of drug:</span>")
+			for(var/datum/addiction/addiction_type as anything in M.mind.active_addictions)
+				to_chat(user, "<span class='alert'>[initial(addiction_type.name)]</span>")
+		else
+			to_chat(user, "<span class='notice'>Subject is not addicted to any types of drugs.</span>")
 
 /obj/item/healthanalyzer/advanced
 	name = "advanced health analyzer"
@@ -431,7 +431,7 @@ GENE SCANNER
 	advanced = TRUE
 
 /obj/item/analyzer
-	desc = "A hand-held environmental scanner which reports current gas levels. Alt-Click to use the built in barometer function."
+	desc = "A hand-held environmental scanner which can scan the gases in the atmosphere or in a container. Can also be used to scan unusual station phenomena. Alt-Click to use the built in barometer function."
 	name = "analyzer"
 	custom_price = 10
 	icon = 'icons/obj/device.dmi'
@@ -583,6 +583,7 @@ GENE SCANNER
 				to_chat(user, "<span class='notice'>This node is empty!</span>")
 			else
 				to_chat(user, "<span class='notice'>[target] is empty!</span>")
+			to_chat(user, "<span class='notice'>Volume: [volume] L</span>")
 
 		if(cached_scan_results && cached_scan_results["fusion"]) //notify the user if a fusion reaction was detected
 			var/instability = round(cached_scan_results["fusion"], 0.01)
@@ -1010,10 +1011,10 @@ GENE SCANNER
 		to_chat(user, "<span class='warning'>you begin isolating [chosen].</span>")
 		if(do_after(user, (600 / (scanner.rating + 1)), target = AM))
 			create_culture(symptomholder, user, AM)
-	else 
+	else
 		using = TRUE
 		if(do_after(user, (timer / (scanner.rating + 1)), target = AM))
-			create_culture(A, user, AM)	
+			create_culture(A, user, AM)
 	using = FALSE
 
 /obj/item/extrapolator/proc/create_culture(var/datum/disease/advance/A, mob/user)

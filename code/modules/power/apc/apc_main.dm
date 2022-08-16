@@ -17,6 +17,7 @@
 	resistance_flags = FIRE_PROOF
 	interaction_flags_machine = INTERACT_MACHINE_WIRES_IF_OPEN | INTERACT_MACHINE_ALLOW_SILICON | INTERACT_MACHINE_OPEN_SILICON
 	layer = ABOVE_WINDOW_LAYER
+	powernet = FALSE // set so that APCs aren't found as powernet nodes //Hackish, Horrible, was like this before I changed it :(
 
 
 
@@ -28,9 +29,10 @@
 		dir_amount = 4\
     )
 
-	var/lon_range = 2
+	///Range of the light emitted when on
+	var/light_on_range = 1.5
+	///Reference to our area
 	var/area/area
-
 	///Mapper helper to tie an apc to another area
 	var/areastring = null
 	///Reference to our internal cell
@@ -63,9 +65,6 @@
 	var/coverlocked = TRUE
 	///Is the AI locked from using the APC
 	var/aidisabled = FALSE
-
-	var/tdir = null
-
 	///Reference to our cable terminal
 	var/obj/machinery/power/terminal/terminal = null
 	///Amount of power used by the lighting channel
@@ -78,7 +77,6 @@
 	var/lastused_total = 0
 	///State of the apc external power (no power, low power, has power)
 	var/main_status = APC_NO_POWER
-	powernet = FALSE // set so that APCs aren't found as powernet nodes //Hackish, Horrible, was like this before I changed it :(
 	///Is the apc hacked by a malf ai?
 	var/malfhack = FALSE //New var for my changes to AI malf. --NeoFite
 	///Reference to our ai hacker
@@ -115,6 +113,10 @@
 	var/icon_update_needed = FALSE
 	///Reference to our remote control
 	var/obj/machinery/computer/apc_control/remote_control = null
+	///Represents a signel source of power alarms for this apc
+	var/datum/alarm_handler/alarm_manager
+	/// Offsets the object by APC_PIXEL_OFFSET (defined in apc_defines.dm) pixels in the direction we want it placed in. This allows the APC to be embedded in a wall, yet still inside an area (like mapping).
+	var/offset_old
 
 	//Clockcult - Has the reward for converting an APC been given?
 	var/clock_cog_rewarded = FALSE
@@ -124,78 +126,44 @@
 	/// To prevent sound loop bugs
 	var/apc_sound_stage = null
 
-/obj/machinery/power/apc/New(turf/loc, var/ndir, var/building=0)
+/obj/machinery/power/apc/New(turf/loc, ndir, var/building=0)
 	if (!req_access)
 		req_access = list(ACCESS_ENGINE_EQUIP)
 	if (!armor)
-		armor = list("melee" = 20, "bullet" = 20, "laser" = 10, "energy" = 100, "bomb" = 30, "bio" = 100, "rad" = 100, "fire" = 90, "acid" = 50, "stamina" = 0)
+		armor = list(MELEE = 20, BULLET = 20, LASER = 10, ENERGY = 100, BOMB = 30, BIO = 0, RAD = 100, FIRE = 90, ACID = 50, STAMINA = 0)
 	..()
 	GLOB.apcs_list += src
 
 	wires = new /datum/wires/apc(src)
-	// offset 24 pixels in direction of dir
-	// this allows the APC to be embedded in a wall, yet still inside an area
-	if (building)
-		setDir(ndir)
-	tdir = dir		// to fix Vars bug
-	setDir(SOUTH)
 
-	switch(tdir)
-		if(NORTH)
-			if((pixel_y != initial(pixel_y)) && (pixel_y != 23))
-				log_mapping("APC: ([src]) at [AREACOORD(src)] with dir ([tdir] | [uppertext(dir2text(tdir))]) has pixel_y value ([pixel_y] - should be 23.)")
-			pixel_y = 23
-		if(SOUTH)
-			if((pixel_y != initial(pixel_y)) && (pixel_y != -23))
-				log_mapping("APC: ([src]) at [AREACOORD(src)] with dir ([tdir] | [uppertext(dir2text(tdir))]) has pixel_y value ([pixel_y] - should be -23.)")
-			pixel_y = -23
-		if(EAST)
-			if((pixel_y != initial(pixel_x)) && (pixel_x != 24))
-				log_mapping("APC: ([src]) at [AREACOORD(src)] with dir ([tdir] | [uppertext(dir2text(tdir))]) has pixel_x value ([pixel_x] - should be 24.)")
-			pixel_x = 24
-		if(WEST)
-			if((pixel_y != initial(pixel_x)) && (pixel_x != -25))
-				log_mapping("APC: ([src]) at [AREACOORD(src)] with dir ([tdir] | [uppertext(dir2text(tdir))]) has pixel_x value ([pixel_x] - should be -25.)")
-			pixel_x = -25
 	if (building)
 		area = get_area(src)
 		opened = APC_COVER_OPENED
 		operating = FALSE
 		name = "\improper [get_area_name(area, TRUE)] APC"
-		machine_stat |= MAINT
-		update_icon()
+		set_machine_stat(machine_stat | MAINT)
+		update_appearance()
 		addtimer(CALLBACK(src, .proc/update), 5)
+		dir = ndir
 
-/obj/machinery/power/apc/Destroy()
-	GLOB.apcs_list -= src
-
-	if(malfai && operating)
-		malfai.malf_picker.processing_time = CLAMP(malfai.malf_picker.processing_time - 10,0,1000)
-	if(area)
-		area.power_light = FALSE
-		area.power_equip = FALSE
-		area.power_environ = FALSE
-		area.power_change()
-		area.poweralert(FALSE, src)
-		area.apc = null
-	if(occupier)
-		malfvacate(TRUE)
-	qdel(wires)
-	wires = null
-	if(cell)
-		qdel(cell)
-	if(terminal)
-		disconnect_terminal()
-	. = ..()
-
-/obj/machinery/power/apc/handle_atom_del(atom/A)
-	if(A == cell)
-		cell = null
-		update_icon()
-		updateUsrDialog()
+	switch(dir)
+		if(NORTH)
+			offset_old = pixel_y
+			pixel_y = APC_PIXEL_OFFSET
+		if(SOUTH)
+			offset_old = pixel_y
+			pixel_y = -APC_PIXEL_OFFSET
+		if(EAST)
+			offset_old = pixel_x
+			pixel_x = APC_PIXEL_OFFSET
+		if(WEST)
+			offset_old = pixel_x
+			pixel_x = -APC_PIXEL_OFFSET
 
 /obj/machinery/power/apc/Initialize(mapload)
 	. = ..()
+	alarm_manager = new(src)
+
 	if(!mapload)
 		return
 	has_electronics = APC_ELECTRONICS_SECURED
@@ -223,11 +191,42 @@
 			log_mapping("Duplicate APC created at [AREACOORD(src)]. Original at [AREACOORD(area.apc)].")
 		area.apc = src
 
-	update_icon()
+	update_appearance()
 
 	make_terminal()
 
 	addtimer(CALLBACK(src, .proc/update), 5)
+
+	///This is how we test to ensure that mappers use the directional subtypes of APCs, rather than use the parent and pixel-shift it themselves.
+	if(abs(offset_old) != APC_PIXEL_OFFSET)
+		log_mapping("APC: ([src]) at [AREACOORD(src)] with dir ([dir] | [uppertext(dir2text(dir))]) has pixel_[dir & (WEST|EAST) ? "x" : "y"] value [offset_old] - should be [dir & (SOUTH|EAST) ? "-" : ""][APC_PIXEL_OFFSET]. Use the directional/ helpers!")
+
+/obj/machinery/power/apc/Destroy()
+	GLOB.apcs_list -= src
+
+	if(malfai && operating)
+		malfai.malf_picker.processing_time = CLAMP(malfai.malf_picker.processing_time - 10,0,1000)
+	if(area)
+		area.power_light = FALSE
+		area.power_equip = FALSE
+		area.power_environ = FALSE
+		area.power_change()
+		area.apc = null
+	QDEL_NULL(alarm_manager)
+	if(occupier)
+		malfvacate(TRUE)
+	if(wires)
+		QDEL_NULL(wires)
+	if(cell)
+		QDEL_NULL(cell)
+	if(terminal)
+		disconnect_terminal()
+	. = ..()
+
+/obj/machinery/power/apc/handle_atom_del(atom/A)
+	if(A == cell)
+		cell = null
+		update_appearance()
 
 /obj/machinery/power/apc/examine(mob/user)
 	. = ..()
@@ -239,21 +238,22 @@
 		else
 			. += "It's [ !terminal ? "not" : "" ] wired up.\n"+\
 			"The electronics are[!has_electronics?"n't":""] installed."
+
 		if(integration_cog || (user.hallucinating() && prob(20)))
 			. += "A small cogwheel is inside of it."
 
 	else
-		if (machine_stat & MAINT)
+		if(machine_stat & MAINT)
 			. += "The cover is closed. Something is wrong with it. It doesn't work."
-		else if (malfhack)
+		else if(malfhack)
 			. += "The cover is broken. It may be hard to force it open."
 		else
 			. += "The cover is closed."
 
-	. += "<span class='notice'>Alt-Click the APC to [ locked ? "unlock" : "lock"] the interface.</span>"
+	. += span_notice("Alt-click the APC to [ locked ? "unlock" : "lock"] the interface.")
 
 	if(issilicon(user))
-		. += "<span class='notice'>Ctrl-Click the APC to switch the breaker [ operating ? "off" : "on"].</span>"
+		. += span_notice("Ctrl-Click the APC to switch the breaker [ operating ? "off" : "on"].")
 
 /obj/machinery/power/apc/AltClick(mob/user)
 	if(!user.canUseTopic(src, !issilicon(user)) || !isturf(loc))
@@ -262,14 +262,16 @@
 		togglelock(user)
 
 /obj/machinery/power/apc/deconstruct(disassembled = TRUE)
-	if(!(flags_1 & NODECONSTRUCT_1))
-		if(!(machine_stat & BROKEN))
-			set_broken()
-		if(opened != APC_COVER_REMOVED)
-			opened = APC_COVER_REMOVED
-			coverlocked = FALSE
-			visible_message("<span class='warning'>The APC cover is knocked down!</span>")
-			update_icon()
+	if(flags_1 & NODECONSTRUCT_1)
+		return
+	if(!(machine_stat & BROKEN))
+		set_broken()
+	if(opened != APC_COVER_REMOVED)
+		opened = APC_COVER_REMOVED
+		coverlocked = FALSE
+		visible_message(span_warning("The APC cover is knocked down!"))
+		update_appearance()
+
 
 /obj/machinery/power/apc/ui_state(mob/user)
 	if(isAI(user))
@@ -282,9 +284,8 @@
 
 /obj/machinery/power/apc/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
-
 	if(!ui)
-		ui = new(user, src, "Apc")
+		ui = new(user, src, "Apc", name)
 		ui.open()
 		ui.set_autoupdate(TRUE) // Power level, reboot timer
 
@@ -339,46 +340,32 @@
 	)
 	return data
 
-/obj/machinery/power/apc/proc/report()
-	return "[area.name] : [equipment]/[lighting]/[environ] ([lastused_equip+lastused_light+lastused_environ]) : [cell? cell.percent() : "N/C"] ([charging])"
-
 /obj/machinery/power/apc/ui_status(mob/user)
 	. = ..()
 	if (!QDELETED(remote_control) && user == remote_control.operator)
 		. = UI_INTERACTIVE
 
 /obj/machinery/power/apc/ui_act(action, params)
-	if(..() || !can_use(usr, 1))
+	. = ..()
+
+	if(. || !can_use(usr, 1) || (locked && !usr.has_unlimited_silicon_privilege && !failure_timer && action != "toggle_nightshift"))
 		return
-
-	switch(action)
-		if("reboot")
-			if(failure_timer)
-				playsound(src, 'monkestation/sound/machines/apc/PowerUp_001.ogg', 30, 1)
-				failure_timer = 0
-				update_icon()
-				update()
-				. = TRUE
-
-	if(locked && !usr.has_unlimited_silicon_privilege)
-		return
-
 	switch(action)
 		if("lock")
 			if(usr.has_unlimited_silicon_privilege)
 				if((obj_flags & EMAGGED) || (machine_stat & (BROKEN|MAINT)))
-					to_chat(usr, "The APC does not respond to the command.")
+					to_chat(usr, span_warning("The APC does not respond to the command!"))
 				else
 					locked = !locked
-					update_icon()
+					update_appearance()
 					. = TRUE
 		if("cover")
-			coverlocked = !coverlocked
 			playsound(src, 'monkestation/sound/machines/apc/PowerSwitch_Cover.ogg', 10, 5)
+			coverlocked = !coverlocked
 			. = TRUE
 		if("breaker")
-			toggle_breaker(usr)
 			playsound(src, 'monkestation/sound/machines/apc/PowerSwitch_Place.ogg', 30, 2)
+			toggle_breaker(usr)
 			. = TRUE
 		if("toggle_nightshift")
 			playsound(src, 'sound/machines/click.ogg', 30, 3)
@@ -389,26 +376,24 @@
 			playsound(src, 'sound/machines/click.ogg', 30, 3)
 			if(!chargemode)
 				charging = APC_NOT_CHARGING
-				update_icon()
+				update_appearance()
 			. = TRUE
 		if("channel")
 			if(params["eqp"])
 				equipment = setsubsystem(text2num(params["eqp"]))
 				playsound(src, 'sound/machines/click.ogg', 30, 4)
-				update_icon()
+				update_appearance()
 				update()
 			else if(params["lgt"])
 				lighting = setsubsystem(text2num(params["lgt"]))
 				playsound(src, 'sound/machines/click.ogg', 30, 4)
-				update_icon()
+				update_appearance()
 				update()
 			else if(params["env"])
 				environ = setsubsystem(text2num(params["env"]))
 				playsound(src, 'sound/machines/click.ogg', 30, 4)
-				update_icon()
+				update_appearance()
 				update()
-			else
-				return FALSE
 			. = TRUE
 		if("overload")
 			if(usr.has_unlimited_silicon_privilege)
@@ -418,27 +403,26 @@
 		if("hack")
 			if(get_malf_status(usr))
 				malfhack(usr)
-				. = TRUE
 		if("occupy")
 			if(get_malf_status(usr))
 				malfoccupy(usr)
-				. = TRUE
 		if("deoccupy")
 			if(get_malf_status(usr))
 				malfvacate()
-				. = TRUE
+		if("reboot")
+			playsound(src, 'monkestation/sound/machines/apc/PowerUp_001.ogg', 30, 1)
+			failure_timer = 0
+			update_appearance()
+			update()
 		if("emergency_lighting")
 			emergency_lights = !emergency_lights
 			playsound(src, 'sound/machines/click.ogg', 30, 3)
 			for(var/obj/machinery/light/L in area)
-				if(!initial(L.no_emergency)) //If there was an override set on creation, keep that override
-					L.no_emergency = emergency_lights
+				if(!initial(L.no_low_power)) //If there was an override set on creation, keep that override
+					L.no_low_power = emergency_lights
 					INVOKE_ASYNC(L, /obj/machinery/light/.proc/update, FALSE)
 				CHECK_TICK
-			. = TRUE
-
-	if(.)
-		wires.ui_update() // I don't know why this would be here, but I'm too scared to remove it
+	return TRUE
 
 /obj/machinery/power/apc/ui_close(mob/user, datum/tgui/tgui)
 	if(isAI(user))
@@ -448,21 +432,22 @@
 
 /obj/machinery/power/apc/process()
 	if(icon_update_needed)
-		update_icon()
+		update_appearance()
 	if(machine_stat & (BROKEN|MAINT))
 		return
-	if(!area?.requires_power)
+	if(!area || !area.requires_power)
 		return
 	if(failure_timer)
 		update()
 		queue_icon_update()
 		failure_timer--
-		force_update = 1
+		force_update = TRUE
 		return
 
-	lastused_light = area.power_usage[AREA_USAGE_LIGHT] + area.power_usage[AREA_USAGE_STATIC_LIGHT]
-	lastused_equip = area.power_usage[AREA_USAGE_EQUIP] + area.power_usage[AREA_USAGE_STATIC_EQUIP]
-	lastused_environ = area.power_usage[AREA_USAGE_ENVIRON] + area.power_usage[AREA_USAGE_STATIC_ENVIRON]
+	//dont use any power from that channel if we shut that power channel off
+	lastused_light = APC_CHANNEL_IS_ON(lighting) ? area.power_usage[AREA_USAGE_LIGHT] + area.power_usage[AREA_USAGE_STATIC_LIGHT] : 0
+	lastused_equip = APC_CHANNEL_IS_ON(equipment) ? area.power_usage[AREA_USAGE_EQUIP] + area.power_usage[AREA_USAGE_STATIC_EQUIP] : 0
+	lastused_environ = APC_CHANNEL_IS_ON(environ) ? area.power_usage[AREA_USAGE_ENVIRON] + area.power_usage[AREA_USAGE_STATIC_ENVIRON] : 0
 	area.clear_usage()
 
 	lastused_total = lastused_light + lastused_equip + lastused_environ
@@ -475,7 +460,7 @@
 
 	var/excess = surplus()
 
-	if(!src.avail())
+	if(!avail())
 		main_status = APC_NO_POWER
 	else if(excess < 0)
 		main_status = APC_LOW_POWER
@@ -484,28 +469,29 @@
 
 	if(cell && !shorted)
 		// draw power from cell as before to power the area
-		var/cellused = min(cell.charge, GLOB.CELLRATE * lastused_total)	// clamp deduction to a max, amount left in cell
+		var/cellused = min(cell.charge, lastused_total JOULES) // clamp deduction to a max, amount left in cell
 		cell.use(cellused)
 
 		if(excess > lastused_total)		// if power excess recharge the cell
 										// by the same amount just used
 			cell.give(cellused)
-			add_load(cellused/GLOB.CELLRATE)		// add the load used to recharge the cell
+			add_load(cellused WATTS) // add the load used to recharge the cell
 
 
-		else		// no excess, and not enough per-apc
-			if((cell.charge/GLOB.CELLRATE + excess) >= lastused_total)		// can we draw enough from cell+grid to cover last usage?
-				cell.charge = min(cell.maxcharge, cell.charge + GLOB.CELLRATE * excess)	//recharge with what we can
-				add_load(excess)		// so draw what we can from the grid
+		else // no excess, and not enough per-apc
+			if((cell.charge WATTS + excess) >= lastused_total) // can we draw enough from cell+grid to cover last usage?
+				cell.charge = min(cell.maxcharge, cell.charge + excess JOULES) //recharge with what we can
+				add_load(excess) // so draw what we can from the grid
 				charging = APC_NOT_CHARGING
 
-			else	// not enough power available to run the last tick!
+			else // not enough power available to run the last tick!
 				charging = APC_NOT_CHARGING
 				chargecount = 0
 				// This turns everything off in the case that there is still a charge left on the battery, just not enough to run the room.
-				equipment = autoset(equipment, 0)
-				lighting = autoset(lighting, 0)
-				environ = autoset(environ, 0)
+				equipment = autoset(equipment, AUTOSET_FORCE_OFF)
+				lighting = autoset(lighting, AUTOSET_FORCE_OFF)
+				environ = autoset(environ, AUTOSET_FORCE_OFF)
+
 
 		// set channels depending on how much charge we have left
 
@@ -515,42 +501,44 @@
 		else if(long_term_power > -10)
 			long_term_power -= 2
 
-		var/power_alert_fine = TRUE
-
 		if(cell.charge <= 0) // zero charge, turn all off
-			equipment = autoset(equipment, 0)
-			lighting = autoset(lighting, 0)
-			environ = autoset(environ, 0)
-			power_alert_fine = FALSE
-		else if(cell.percent() < 15 && long_term_power < 0)	// <15%, turn off lighting & equipment
-			equipment = autoset(equipment, 2)
-			lighting = autoset(lighting, 2)
-			environ = autoset(environ, 1)
-			power_alert_fine = FALSE
-		else if(cell.percent() < 30 && long_term_power < 0)			// <30%, turn off equipment
-			equipment = autoset(equipment, 2)
-			lighting = autoset(lighting, 1)
-			environ = autoset(environ, 1)
-			power_alert_fine = FALSE
-		else									// otherwise all can be on
-			equipment = autoset(equipment, 1)
-			lighting = autoset(lighting, 1)
-			environ = autoset(environ, 1)
+			equipment = autoset(equipment, AUTOSET_FORCE_OFF)
+			lighting = autoset(lighting, AUTOSET_FORCE_OFF)
+			environ = autoset(environ, AUTOSET_FORCE_OFF)
+			alarm_manager.send_alarm(ALARM_POWER)
+
+		else if(cell.percent() < 15 && long_term_power < 0) // <15%, turn off lighting & equipment
+			equipment = autoset(equipment, AUTOSET_OFF)
+			lighting = autoset(lighting, AUTOSET_OFF)
+			environ = autoset(environ, AUTOSET_ON)
+			alarm_manager.send_alarm(ALARM_POWER)
+
+		else if(cell.percent() < 30 && long_term_power < 0) // <30%, turn off equipment
+			equipment = autoset(equipment, AUTOSET_OFF)
+			lighting = autoset(lighting, AUTOSET_ON)
+			environ = autoset(environ, AUTOSET_ON)
+			alarm_manager.send_alarm(ALARM_POWER)
+
+		else // otherwise all can be on
+			equipment = autoset(equipment, AUTOSET_ON)
+			lighting = autoset(lighting, AUTOSET_ON)
+			environ = autoset(environ, AUTOSET_ON)
+			if(cell.percent() > 75)
+				alarm_manager.clear_alarm(ALARM_POWER)
 
 		if(integration_cog)
-			power_alert_fine = TRUE
-		area.poweralert(power_alert_fine, src)
+			alarm_manager.clear_alarm(ALARM_POWER)
 
 		// now trickle-charge the cell
 		if(chargemode && charging == APC_CHARGING && operating)
-			if(excess > 0)		// check to make sure we have enough to charge
+			if(excess > 0) // check to make sure we have enough to charge
 				// Max charge is capped to % per second constant
-				var/ch = min(excess * GLOB.CELLRATE, cell.maxcharge * GLOB.CHARGELEVEL)
-				add_load(ch/GLOB.CELLRATE) // Removes the power we're taking from the grid
+				var/ch = min(excess JOULES, cell.maxcharge JOULES)
+				add_load(ch WATTS) // Removes the power we're taking from the grid
 				cell.give(ch) // actually recharge the cell
 
 			else
-				charging = APC_NOT_CHARGING		// stop charging
+				charging = APC_NOT_CHARGING // stop charging
 				chargecount = 0
 
 		// show cell as fully charged if so
@@ -566,13 +554,12 @@
 					chargecount = 0
 
 				if(chargecount == 10)
-
 					chargecount = 0
 					charging = APC_CHARGING
-
 		else // chargemode off
-			charging = 0
+			charging = APC_NOT_CHARGING
 			chargecount = 0
+
 
 		//=====Clock Cult=====
 		if(integration_cog && cell.charge >= cell.maxcharge/2)
@@ -598,10 +585,10 @@
 
 		charging = APC_NOT_CHARGING
 		chargecount = 0
-		equipment = autoset(equipment, 0)
-		lighting = autoset(lighting, 0)
-		environ = autoset(environ, 0)
-		area.poweralert(0, src)
+		equipment = autoset(equipment, AUTOSET_FORCE_OFF)
+		lighting = autoset(lighting, AUTOSET_FORCE_OFF)
+		environ = autoset(environ, AUTOSET_FORCE_OFF)
+		alarm_manager.send_alarm(ALARM_POWER)
 
 	// update icon & area power if anything changed
 	if(last_lt != lighting || last_eq != equipment || last_en != environ || force_update)
@@ -612,7 +599,38 @@
 		queue_icon_update()
 
 
+/obj/machinery/power/apc/proc/report()
+	return "[area.name] : [equipment]/[lighting]/[environ] ([lastused_total]) : [cell? cell.percent() : "N/C"] ([charging])"
 
+/obj/machinery/power/apc/proc/reset(wire)
+	switch(wire)
+		if(WIRE_IDSCAN)
+			locked = TRUE
+		if(WIRE_POWER1, WIRE_POWER2)
+			if(!wires.is_cut(WIRE_POWER1) && !wires.is_cut(WIRE_POWER2))
+				shorted = FALSE
+		if(WIRE_AI)
+			if(!wires.is_cut(WIRE_AI))
+				aidisabled = FALSE
+		if(APC_RESET_EMP)
+			equipment = APC_CHANNEL_AUTO_ON
+			environ = APC_CHANNEL_AUTO_ON
+			update_appearance()
+			update()
+
+// overload all the lights in this APC area
+/obj/machinery/power/apc/proc/overload_lighting()
+	if(!operating || shorted)
+		return
+	if(cell && cell.charge >= 20)
+		cell.use(20)
+		INVOKE_ASYNC(src, .proc/break_lights)
+
+/obj/machinery/power/apc/proc/break_lights()
+	for(var/obj/machinery/light/breaked_light in area)
+		breaked_light.on = TRUE
+		breaked_light.break_light_tube()
+		stoplag()
 
 /*Power module, used for APC construction*/
 /obj/item/electronics/apc

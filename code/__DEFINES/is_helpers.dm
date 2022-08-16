@@ -51,6 +51,8 @@ GLOBAL_LIST_INIT(turfs_without_ground, typecacheof(list(
 
 #define isplatingturf(A) (istype(A, /turf/open/floor/plating))
 
+#define istransparentturf(A) (HAS_TRAIT(A, TURF_Z_TRANSPARENT_TRAIT))
+
 //Mobs
 #define isliving(A) (istype(A, /mob/living))
 
@@ -255,6 +257,8 @@ GLOBAL_LIST_INIT(pointed_types, typecacheof(list(
 #define isprojectile(A) (istype(A, /obj/item/projectile))
 
 #define isgun(A) (istype(A, /obj/item/gun))
+
+#define is_reagent_container(O) (istype(O, /obj/item/reagent_containers))
 
 //Assemblies
 #define isassembly(O) (istype(O, /obj/item/assembly))

@@ -928,6 +928,16 @@ Pass a positive integer as an argument to override a bot's default speed.
 	icon_state = "[initial(icon_state)][get_bot_flag(bot_mode_flags, BOT_MODE_ON)]"
 	return ..()
 
+// Machinery to simplify topic and access calls
+/obj/machinery/bot_core
+	use_power = NO_POWER_USE
+	anchored = FALSE
+
+/obj/machinery/bot_core/Initialize(mapload)
+	. = ..()
+	if(!isbot(loc))
+		return INITIALIZE_HINT_QDEL
+
 /mob/living/simple_animal/bot/proc/topic_denied(mob/user) //Access check proc for bot topics! Remember to place in a bot's individual Topic if desired.
 	if(!user.canUseTopic(src, !issilicon(user)))
 		return TRUE

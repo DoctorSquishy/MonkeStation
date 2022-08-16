@@ -34,18 +34,18 @@
 	SSmapping.nuke_tiles -= src
 	return ..()
 
-/turf/open/floor/circuit/update_icon()
-	if(on)
-		if(LAZYLEN(SSmapping.nuke_threats))
-			icon_state = "rcircuitanim"
-			light_color = LIGHT_COLOR_FLARE
-		else
-			icon_state = icon_normal
-			light_color = initial(light_color)
-		set_light(1.4, 0.5)
-	else
-		icon_state = "[icon_normal]off"
+/turf/open/floor/circuit/update_appearance(updates)
+	. = ..()
+	if(!on)
 		set_light(0)
+		return
+
+	set_light_color(LAZYLEN(SSmapping.nuke_threats) ? LIGHT_COLOR_FLARE : initial(light_color))
+	set_light(1.4, 0.5)
+
+/turf/open/floor/circuit/update_icon_state()
+	icon_state = on ? (LAZYLEN(SSmapping.nuke_threats) ? "rcircuitanim" : icon_normal) : "[icon_normal]off"
+	return ..()
 
 /turf/open/floor/circuit/off
 	icon_state = "bcircuitoff"
@@ -111,17 +111,14 @@
 /turf/open/floor/pod
 	name = "pod floor"
 	icon_state = "podfloor"
-	icon_regular_floor = "podfloor"
 	floor_tile = /obj/item/stack/tile/pod
 
 /turf/open/floor/pod/light
 	icon_state = "podfloor_light"
-	icon_regular_floor = "podfloor_light"
 	floor_tile = /obj/item/stack/tile/pod/light
 
 /turf/open/floor/pod/dark
 	icon_state = "podfloor_dark"
-	icon_regular_floor = "podfloor_dark"
 	floor_tile = /obj/item/stack/tile/pod/dark
 
 

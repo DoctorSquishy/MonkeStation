@@ -33,7 +33,7 @@
 
 	var/co2overloadtime = null
 	var/temperature_resistance = T0C+75
-	var/obj/item/reagent_containers/food/snacks/meat/slab/type_of_meat = /obj/item/reagent_containers/food/snacks/meat/slab
+	var/obj/item/food/meat/slab/type_of_meat = /obj/item/food/meat/slab
 
 	var/gib_type = /obj/effect/decal/cleanable/blood/gibs
 
@@ -74,3 +74,7 @@
 
 	/// Timer id of any transformation
 	var/transformation_timer
+	/// How many food buffs we have at once
+	var/applied_food_buffs = 0
+	//Max amount of food buffs
+	var/max_food_buffs = 2

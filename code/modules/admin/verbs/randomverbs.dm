@@ -28,11 +28,11 @@
 	if(!check_rights(R_ADMIN))
 		return
 
-	message_admins("[key_name_admin(src)] has started answering [ADMIN_LOOKUPFLW(M)]'s prayer.")
+	message_admins("[key_name_admin(src)] has started sending [ADMIN_LOOKUPFLW(M)] a subtle message.")
 	var/msg = capped_input(usr, "Message:", "Subtle PM to [M.key]")
 
 	if(!msg)
-		message_admins("[key_name_admin(src)] decided not to answer [ADMIN_LOOKUPFLW(M)]'s prayer")
+		message_admins("[key_name_admin(src)] did not send [ADMIN_LOOKUPFLW(M)] a subtle message.")
 		return
 	if(usr)
 		if (usr.client)
@@ -69,10 +69,10 @@
 		if(!sender)
 			return
 
-	message_admins("[key_name_admin(src)] has started answering [key_name_admin(H)]'s [sender] request.")
+	message_admins("[key_name_admin(src)] has started sending [key_name_admin(H)] a [sender] headset message.")
 	var/input = capped_input(usr, "Please enter a message to reply to [key_name(H)] via their headset.","Outgoing message from [sender]")
 	if(!input)
-		message_admins("[key_name_admin(src)] decided not to answer [key_name_admin(H)]'s [sender] request.")
+		message_admins("[key_name_admin(src)] cancelled their headset message to [key_name_admin(H)]")
 		return
 
 	log_directed_talk(mob, H, input, LOG_ADMIN, "reply")
@@ -1104,7 +1104,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			var/turf/endT = spaceDebrisFinishLoc(startside, T.z)
 			new /obj/effect/immovablerod(startT, endT,target)
 		if(ADMIN_PUNISHMENT_SUPPLYPOD_QUICK)
-			var/target_path = input(usr,"Enter typepath of an atom you'd like to send with the pod (type \"empty\" to send an empty pod):" ,"Typepath","/obj/item/reagent_containers/food/snacks/grown/harebell") as null|text
+			var/target_path = input(usr,"Enter typepath of an atom you'd like to send with the pod (type \"empty\" to send an empty pod):" ,"Typepath","/obj/item/food/grown/harebell") as null|text
 			var/obj/structure/closet/supplypod/centcompod/pod = new()
 			pod.damage = 40
 			pod.explosionSize = list(0,0,0,2)
@@ -1215,7 +1215,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	punish_log(target, punishment)
 //MONKESTATION ADDITION
 /proc/breadify(atom/movable/target)
-	var/obj/item/reagent_containers/food/snacks/store/bread/plain/bread = new(get_turf(target))
+	var/obj/item/food/bread/plain/bread = new(get_turf(target))
 	target.forceMove(bread)
 //MONKESTATION ADDITION END
 /client/proc/punish_log(var/whom, var/punishment)
